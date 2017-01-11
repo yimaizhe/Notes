@@ -1,0 +1,177 @@
+一 、
+
+设置Git的user name和email：
+
+$ git config --global user.name "xuhaiyan"
+
+$ git config --global user.email "haiyan.xu.vip@gmail.com"
+
+
+
+二、生成SSH密钥过程：
+1.查看是否已经有了ssh密钥：cd ~/.ssh
+如果没有密钥则不会有此文件夹，有则备份删除
+2.生存密钥：
+
+    $ ssh-keygen -t rsa -C “haiyan.xu.vip@gmail.com”
+    按3个回车，密码为空。
+
+
+    Your identification has been saved in /home/tekkub/.ssh/id_rsa.
+    Your public key has been saved in /home/tekkub/.ssh/id_rsa.pub.
+    The key fingerprint is:
+    ………………
+	
+   $ ssh-keygen -C "gennad.zlobin@gmail.com" -t rsa (your email)
+
+	Now your generated keys are in C:\Users\username\.ssh (in Windows 7).
+	Next you load the content of your public key to your project on Github
+	In Eclipse open Window->Preferences->General->Network->SSH2 and set your ~/.ssh as SSH Home
+
+	After that go to Key Management tab and Load existing Key - set here your private key in ~/.ssh.
+
+	After that you can push your project to Github (but I set ssh protocol, not Git+ssh).
+	一定要注意是C:\Users\username\.ssh 而不是C:\Users\username\ssh，少一个点就错了
+
+最后得到了两个文件：id_rsa和id_rsa.pub
+
+
+3.添加密钥到ssh：ssh-add 文件名
+需要之前输入密码。
+4.在github上添加ssh密钥，这要添加的是“id_rsa.pub”里面的公钥。
+
+打开https://github.com/ ，登陆xuhaiyan825，然后添加ssh。
+
+
+5.测试：ssh git@github.com
+
+    The authenticity of host ‘github.com (207.97.227.239)’ can’t be established.
+    RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+    Are you sure you want to continue connecting (yes/no)? yes
+    Warning: Permanently added ‘github.com,207.97.227.239′ (RSA) to the list of known hosts.
+    ERROR: Hi tekkub! You’ve successfully authenticated, but GitHub does not provide shell access
+    Connection to github.com closed.
+
+
+三、 开始使用github
+1.获取源码：
+
+	$ git clone git@github.com:billyanyteen/github-services.git
+
+2.这样你的机器上就有一个repo了。
+3.git于svn所不同的是git是分布式的，没有服务器概念。所有的人的机器上都有一个repo，每次提交都是给自己机器的repo
+仓库初始化：
+
+	git init
+
+生成快照并存入项目索引：
+
+	git add
+
+文件,还有git rm,git mv等等…
+项目索引提交：
+
+	git commit
+
+4.协作编程：
+    将本地repo于远程的origin的repo合并，
+    推送本地更新到远程：
+
+	git push origin master
+
+    更新远程更新到本地：
+
+	git pull origin master
+
+补充：
+   添加远端repo：
+
+	$ git remote add upstream git://github.com/pjhyett/github-services.git
+
+   重命名远端repo：
+
+	$ git://github.com/pjhyett/github-services.git为“upstream”
+
+5,常用命令
+    
+    Git  diff  可以查看当前没有add 的内容修改（不在缓冲区的文件变化）
+    git diff --cached查看已经add但没有commit 的改动（在缓冲区的文件变化）
+    git diff HEAD 是上面两条命令的合并
+
+    git log 查看commit的历史 
+    git show <commit-hash-id>查看某次commit的修改内容 
+    git log -p <filename>查看某个文件的修改历史 
+    git log -p -2查看最近2次的更新内容
+ 
+    git push的语法为：git push <远程主机名> <本地分支名>:<远程分支名>
+    git push origin master  ——本地分支名省略，代表与远程相同
+ PS：
+    a.如果省略本地分支名，则表示删除指定的远程分支，因为这等同于推送一个空的本地分支到远程分支。例如：
+	 $ git push origin :master
+    该命令等同于如下指令：`$ git push origin --delete master`，表示删除远程主机的master分支。
+    b.git push 有时候本地分支和远程分支名都可以省略，有时候连主机名也可以省略。
+    c.如果当前分支与多个主机存在追踪关系，则可以使用-u选项指定一个默认主机，这样后面就可以不加任何参数使用git push:
+	 $ git push -u origin master
+
+
+    git status 查看状态
+
+1 查看远程分支
+
+git branch -r 查看远程远程分支
+
+git branch -a 查看所有分支
+
+git fetch <远程主机名> <远程分支名> 取出远程主机的某个分支
+
+git checkout -b <本地新分支名> <远程主机名>/<远程分支名> 将取出的远程分支和新建的本地分支合并
+
+也可以使用git merge 或者 git rebase + <远程主机名>/<远程分支名> 远程分支和当前分支合并
+
+2 查看本地分支
+
+$ git branch
+
+* master
+
+3 创建分支
+
+shuohailhl@SHUOHAILHL-PC /f/ggg/jingwei (br-2.1.2.2)
+
+$ git branch test
+
+$ git branch
+
+* br-2.1.2.2
+
+master
+
+test
+
+4 切换分支到test
+
+$ git checkout test
+
+5 删除本地分支
+git branch -d xxxxx
+
+
+四、git pull
+
+取回远程主机某个分支的更新，再与本地的指定分支合并
+
+git pull <远程主机名> <远程分支名>:<本地分支名>
+
+比如，取回 origin 主机的 next 分支，与本地的 master 分支合并，需要写成下面这样:
+
+git pull origin next:master 实质上这相当于想做git fetch 然后再git merge
+
+五、git push
+
+用于将本地分支的更新，推送到远程主机。它的格式与 git push 命令相仿
+
+git push <远程主机名> <本地分支名>:<远程分支名>
+
+如果远程主机的版本比本地版本更新，推送时Git会报错，要求先在本地 git pull 合并差异，然后再推送到远程主机。这时，如果你一定要推送，可以使用 –force选项。
+
+最后，git push 不会推送标签（tag），除非使用 –tags选项。

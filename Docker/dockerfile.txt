@@ -1,0 +1,68 @@
+
+docker build -file dockerfile -t imageName:tag /src/dir
+挂载目录
+
+数据卷：是一个可供容器使用的特殊目录，它绕过文件系统可以提供很多有用的特性：
+
+    可以在容器之间共享和重用；
+    对数据卷的修改会立马生效；
+    对数据卷的更新不会影响镜像；
+    卷会一直存在，直到没有容器使用
+
+1，在一个容器内创建一个数据卷
+     在用docker run命令时，使用-v 标记可以在容器内创建一个数据卷；多次使用创建多个；
+eg: 使用ImageName镜像创建test容器，并创建一个数据卷挂载到容器的/webapp目录
+         docker run -d --name test -v /webapp imageName
+2，挂载一个主机目录作为数据卷
+     docker可以支持把一个宿主机上的目录挂载到镜像里，
+
+          docker run -it -v /home/dock/Downloads:/usr/Downloads ubuntu64 /bin/bash
+
+     通过-v参数，冒号前为宿主机目录，必须为绝对路径，冒号后为镜像内挂载的路径；
+
+     现在镜像内就可以共享宿主机里的文件了。默认挂载的路径权限为读写。如果指定为只读可以用：ro
+
+          docker run -it -v /home/dock/Downloads:/usr/Downloads:ro ubuntu64 /bin/bash
+
+
+写dockerfile注意事项：
+     使用ADD命令时，src目录为当前目录的相对目录，不能使用../以及绝对路径，所以应把所有用到的包、文件、文件夹放到dockerfile所在的目录下；
+     ADD时，将文件夹中所有内容添加到容器的目录下时，没有内容,
+ADD ./jdk.tar /home/jdk   ——自动解压？ 解压到jdk目录下 or 在jdk目录下生成jdk目录？
+
+docker file:
+
+#使用文件系统的web应用
+FROM admin/filesystemtest
+MAINTAINER hannn "hannn@dcits.com"
+RUN rm -rf /tomcat/webapps/*
+ADD ./file /tomcat/webapps/file
+RUN chmod +x /tomcat/bin/*.sh
+WORKDIR /tomcat/bin
+ENTRYPOINT nohup ./start.sh >catalina.log && /bin/bash
+
+
+gitlab-ci.yml:
+
+variables:
+REGISTRY_HOST: "registry.paas:443"
+IMAGE_NAME: "zlimage0301"
+USER_NAME: "kevin0301"
+ACCESS_PORT: "8080"
+SERVICES: "[test]"
+START_SCRIPT_PATH: "bash /tomcat/bin/start.sh"
+stages:
+- build
+job1:
+stage: build
+script:
+- ant
+- docker login -u $USER_NAME -p kevin0301 -e kevin@qq.com $REGISTRY_HOST
+- docker build -t $REGISTRY_HOST/$USER_NAME/$IMAGE_NAME:$CI_BUILD_REF_NAME-${CI_BUILD_REF:0:8} .
+- docker login -u $USER_NAME -p kevin0301 -e kevin@qq.com $REGISTRY_HOST
+- docker push $REGISTRY_HOST/$USER_NAME/$IMAGE_NAME:$CI_BUILD_REF_NAME-${CI_BUILD_REF:0:8}
+only:
+- master
+
+except:
+- develops

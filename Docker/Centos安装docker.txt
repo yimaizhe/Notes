@@ -1,0 +1,101 @@
+
+方法三、是否已创建dockers网桥，若已创建，启动网桥，
+    
+也可能是用户权限问题，sudo ps -ef|grep docker ，查看是否有docker进程
+
+方法一、使用yum install docker安装完后启动不了
+[root@apptest ~]# service docker start
+Redirecting to /bin/systemctl start  docker.service
+
+一直停留在以上步骤
+
+可以使用以下命令来安装，即可成功。
+
+一个问题让我折腾了两天，试过关闭防火墙，关闭selinux，重装系统，等等网上能查到的方法都解决不了。
+
+[root@apptest ~]# yum remove docker
+[root@apptest ~]# yum remove docker-selinux
+
+[root@test yum.repos.d]# vi  /etc/yum.repos.d/docker.repo
+ 
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+ 
+[root@test yum.repos.d]# yum install docker-engine
+ 
+已安装:
+  docker-engine.x86_64 0:1.10.2-1.el7.centos                                    
+
+作为依赖被安装:
+  docker-engine-selinux.noarch 0:1.10.2-1.el7.centos   
+
+[root@apptest ~]# service docker start
+Redirecting to /bin/systemctl start  docker.service
+[root@apptest ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+
+[root@test yum.repos.d]# docker version
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 16:16:33 2016
+ OS/Arch:      linux/amd64
+
+Server:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 16:16:33 2016
+ OS/Arch:      linux/amd64
+[root@test yum.repos.d]# 
+
+
+或者使用以下方法
+
+[root@apptest ~]# curl -fsSL https://get.docker.com/ | sh
++ sh -c 'sleep 3; yum -y -q install docker-engine'
+警告：/var/cache/yum/x86_64/7/docker-main-repo/packages/docker-engine- selinux-1.10.2-1.el7.centos.noarch.rpm: 头V4 RSA/SHA512 Signature, 密钥 ID 2c52609d: NOKEY
+docker-engine-selinux-1.10.2-1.el7.centos.noarch.rpm 的公钥尚未安装
+导入 GPG key 0x2C52609D:
+ 用户ID     : "Docker Release Tool (releasedocker) <docker@docker.com>"
+ 指纹       : 5811 8e89 f3a9 1289 7c07 0adb f762 2157 2c52 609d
+ 来自       : https://yum.dockerproject.org/gpg
+setsebool:  SELinux is disabled.
++ sh -c 'docker version'
+Client:
+ Version:      1.10.2
+ API version:  1.22
+ Go version:   go1.5.3
+ Git commit:   c3959b1
+ Built:        Mon Feb 22 16:16:33 2016
+ OS/Arch:      linux/amd64
+Cannot connect to the Docker daemon. Is the docker daemon running on this host?
+
+If you would like to use Docker as a non-root user, you should now consider
+adding your user to the "docker" group with something like:
+
+  sudo usermod -aG docker your-user
+
+Remember that you will have to log out and back in for this to take effect!
+
+[root@apptest ~]# 
+
+[root@apptest ~]# service docker start
+Redirecting to /bin/systemctl start  docker.service
+[root@apptest ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+[root@apptest ~]# 
+
+ 
+
+官方网址可查
+
+https://docs.docker.com/engine/installation/linux/centos/
+

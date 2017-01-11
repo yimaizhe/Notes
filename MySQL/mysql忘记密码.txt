@@ -1,0 +1,104 @@
+启动mysql服务
+
+net start mysql
+
+远程访问数据库：
+
+mysql -h10.126.3.163 -u root -p smartpaas
+
+
+进入客户端：
+C:\Documents and Settings\Administrator>mysql -u root -p root
+
+
+------------------------------------------
+
+1，关闭后台mysql.exe程序后，
+
+输入mysqld --skip-grant-tables
+
+2，新打开dos窗口，输入mysql
+
+
+
+
+C:\Documents and Settings\Administrator>mysql
+Welcome to the MySQL monitor. Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.1.28-rc-community MySQL Community Server (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+
+3，输入show databases
+mysql> show databases;
++--------------------+
+| Database |
++--------------------+
+| information_schema |
+| mysql |
+| test |
++--------------------+
+3 rows in set (0.03 sec)】
+
+显示出所有的数据库列表，
+
+4，输入use mysql，选择mysql库
+mysql>
+mysql> use mysql
+Database changed
+mysql>
+mysql>
+
+5,输入show tables，查看mysql所有的表
+mysql> show tables
+-> ;
++---------------------------+
+| Tables_in_mysql |
++---------------------------+
+| columns_priv |
+| db |
+| event |
+| func |
+| general_log |
+| help_category |
+| help_keyword |
+| help_relation |
+| help_topic |
+| host |
+| ndb_binlog_index |
+| plugin |
+| proc |
+| procs_priv |
+| servers |
+| slow_log |
+| tables_priv |
+| time_zone |
+| time_zone_leap_second |
+| time_zone_name |
+| time_zone_transition |
+| time_zone_transition_type |
+| user |
++---------------------------+
+23 rows in set (0.13 sec)
+
+6， user表中存放这用户名和密码信息
+
+
+mysql> select user,host,password from user;
++------+-----------+-------------------------------------------+
+| user | host | password |
++------+-----------+-------------------------------------------+
+| root | localhost | *81F5E21E35407D884A6CD4A731AEBFB6AF209E1B |
++------+-----------+-------------------------------------------+
+1 row in set (0.02 sec)
+
+7，修改密码
+
+mysql> update user set password=password('root') where user='root' and host='localhost';
+Query OK, 0 rows affected (0.02 sec)
+Rows matched: 1 Changed: 0 Warnings: 0
+
+mysql>
+
+8，退出命令行，重启数据库，用新密码尝试登陆

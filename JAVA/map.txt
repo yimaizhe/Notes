@@ -1,0 +1,8 @@
+MAP
+
+List<Map<String, Object>> IPlist = (List<Map<String, Object>>)delExternalIp;
+    for(Map<String, Object> ips: IPlist){
+                cIp = (String) ips.get(Constants.App.LXC_IP); 
+
+获得的cIP为null，Constants.App.LXC_IP=“LXC_IP”，get时，会转换为““LXC_IP””；（？）
+把Object换为String没有问题，

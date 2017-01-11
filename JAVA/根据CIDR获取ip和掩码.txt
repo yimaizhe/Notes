@@ -1,0 +1,58 @@
+    需求：给定一个ip：172.28.68.0和一个CIDR格式的ip配置项 ipConfig="172.28.64.0/22,172.28.72.11;172.16.0.0/12,172.28.80.27"，判断该IP是 在哪个cidr表示的地址段，并获取cidr格式后面的一个ip地址。
+        首先，要对cidr表示法要有所了解。
+        例如：172.28.64.0/22表示前22位不变，用1表示，后10位表示网络主机范围，相应的掩码表示为：
+
+                    11111111 11111111 11111100 00000000即该CIDR的掩码为：255.255.252.0
+
+    然后根据公式计算地址范围：
+
+        网络地址 = IP address & Mask
+            
+        网络广播地址 = Network address + Mask反码
+            
+        地址范围 = { 网络地址， 网络地址 + Mask反码}
+           
+
+    例如：      
+
+          IP address = 200.6.12.55,Mask = 255.255.248.0       
+        网络地址 = 200.6.12.55 &  255.255.248.0 = 200.6.8.0       
+        地址范围 = {200.6.8.0,200.6.15.255}   
+
+     确定范围后如何快速判断一个IP是否在该CIDR表示的范围内？这里用的技巧是把ip转换为256进制的数，再看该IP是否在范围内。
+
+     /* 
+         * 获取网络ID，即也是CIDR表示的最小IP 
+         * @param ipCidr CIDR法表示的IP，例如：172.16.0.0/12 
+         * @return 网络ID，即也是CIDR表示的最小IP 
+         */  
+        private String getNetworkId(String ipCidr){  
+            String[] ipMaskLen = ipCidr.split("\\/");  
+            String mask = this.getMask(Integer.parseInt(ipMaskLen[1]));  
+            String[] ips = ipMaskLen[0].split("\\.");  
+            String[] masks = mask.split("\\.");  
+            StringBuffer sb = new StringBuffer();  
+            for(int i=0;i<4;i++){  
+                sb.append(Integer.parseInt(ips[i])&Integer.parseInt(masks[i]));  
+                if(i!=3){  
+                    sb.append(".");  
+                }  
+            }  
+            return sb.toString();  
+        }  
+
+        /* 
+         * 获取掩码 
+         * @param maskLength 网络ID位数 
+         * @return 
+         */  
+        private String getMask(int maskLength){  
+            int binaryMask = 0xFFFFFFFF << (32 - maskLength);  
+            StringBuffer sb = new StringBuffer();  
+            for(int shift=24;shift>0;shift-=8){  
+                sb.append(Integer.toString((binaryMask>>>shift)&0xFF));  
+                sb.append(".");  
+            }  
+            sb.append(Integer.toString(binaryMask&0xFF));  
+            return sb.toString();  
+        }  

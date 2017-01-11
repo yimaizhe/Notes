@@ -1,0 +1,58 @@
+ava程序中对象的创建有四种方式：
+
+● 调用new语句创建对象，最常见的一种
+
+● 运用反射手段创建对象,调用java.lang.Class 或者 java.lang.reflect.Constructor 类的newInstance()实例方法
+
+● 调用对象的clone()方法
+
+● 运用序列化手段,调用java.io.ObjectInputStream 对象的 readObject()方法.
+
+下面分别实例讲述
+
+一、new语句创建
+
+
+    ​// 使用java语言的关键字 new 创建对象，初始化对象数据　
+    ​MyObject mo = new MyObject() ;　
+
+二、clone方法创建对象
+
+
+      构造函数不被自动调用。
+　　　public class CreateInstance implements Cloneable{
+　　　　public CreateInstance getInstance() throws CloneNotSupportedException{
+　　　　　return (CreateInstance) this.clone();
+            }
+         }
+　　如果需要复制上面的那个obj指向的对象实例时，调用new CreateInstance().getInstance()方法就ok了。
+      但是为什么不直接使用new CreateInstance().clone()呢？
+        JDK中Object# clone()方法的原型是：protected native Object clone() throws　 CloneNotSupportedException; 方法修饰符是protected，而不是public。
+      这种访问的不可见性使得我们对Object#clone()方法不可见。所以，必需重写Object的clone方法后才能使用。
+      Java代码：
+　　　public class CreateInstance implements Cloneable{
+　　　　public CreateInstance clone throws CloneNotSupportedException{
+　　　　　return (CreateInstance) super.clone();
+            }
+         }
+    值得注意的是 ：如果需要使用clone方法，必需实现java.lang.Cloneable接口，否则会抛出java.lang.CloneNotSupportedException。
+      另外clone方法所做的的操作是直接复制字段的内容，换句话说，这个操作并不管该字段对应的对象实例内容。
+      像这样字段对字段的拷贝（field to field copy）就成为"浅拷贝"，clone方法所做的正是"浅拷贝"。
+
+三、反射方法newInstance创建对象
+
+
+      利用java.lang.Class类的newInstance方法，则可根据Class对象的实例，建立该Class所表示的类的对象实例。
+      创建CreateInstace类的对象实例可以使用下面的语句（这样需要一个已经存在的对象实例）。
+      CreateInstance instance = CreateInstance.class.newInstance();
+      或者使用下面的语句（只需要存在相应的.class文件即可）
+      CreateInstance instance = (CreateInstance)Class.forname("com.create.instance.CreateInstance").newInstance();
+      如果包下不存在相应.class文件，则会抛出ClassNotFoundException。
+      注意 ：newInstance创建对象实例的时候会调用无参的构造函数，所以必需确保类中有无参数的构造函数，否则将会抛出java.lang.InstantiationException异常。
+      无法进行实例化。
+
+四、 序列化readObject()方法创建对象
+​
+
+如果对象是通过ObjectInputStream类的readObject()方法创建的，那么Java虚拟机通过从输入流中读入的序列化数据来初始化那些非暂时性（non-transient）的实例变量。
+在其他情况下，如果实例变量在声明时被显式初始化，那么就把初始化值赋给实例变量，接着再执行构造方法。这是最常见的初始化对象的方式。

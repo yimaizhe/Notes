@@ -1,0 +1,38 @@
+1,创建本地仓库
+	git init
+
+2,本地仓库与远程仓库关联
+	git remote add origin https://github.com/yimaizhe/Notes.git
+
+3,将新文件加入本地仓库（这样git就会追踪这个文件）
+	git add fileName
+
+4,将文件提交到仓库
+	git commit -m "message"
+
+5，拉远程仓库的内容
+	git pull origin master
+   即：	git pull <远程主机名> <远程分支名>:<本地分支名>
+
+6,把本地仓库内容推送到远程
+	git push -u 
+     
+   即：  git push <远程主机名> <本地分支名>:<远程分支名>
+
+7，查看当前状态
+	git status
+
+8，查看git配置
+	git config -l
+ 
+--------------------------------------
+问题：
+--------------------------------------
+1,使用代理上网时，连接git总是超时，pull不了，ssh -T 也不行：
+
+  查看代理：
+	git config --global http.proxy
+  设置代理
+	git config --global http.proxy 10.126.3.161:3128
+  取消代理
+	git config --global --unset http.proxy

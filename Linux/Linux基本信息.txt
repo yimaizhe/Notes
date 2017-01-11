@@ -1,0 +1,38 @@
+磁盘空间满了：
+
+查看空间剩余：
+     df -h  —— -h参数：以可读方式显示
+查看哪些文件和目录占用空间最大：
+     du -sh /
+查看某一目录下各个文件所占空间：          
+     du -sh /home/*
+
+查看所有用户信息：
+     cat /etc/passwd 查看所有用户的列表
+创建用户：
+    useradd testUser 创建用户testUser
+    passwd testUseer 为testUser设置新密码
+
+容器里执行：
+1，cat /proc/version
+Linux version 3.13.0-32-generic (buildd@kissel) (gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) ) #57-Ubuntu SMP Tue Jul 15 03:51:08 UTC 2014
+
+2，cat os-release
+NAME="CentOS Linux"
+VERSION="7 (Core)"
+ID="centos"
+ID_LIKE="rhel fedora"
+VERSION_ID="7"
+PRETTY_NAME="CentOS Linux 7 (Core)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:centos:centos:7"
+HOME_URL="https://www.centos.org/"
+BUG_REPORT_URL="https://bugs.centos.org/"
+
+CENTOS_MANTISBT_PROJECT="CentOS-7"
+CENTOS_MANTISBT_PROJECT_VERSION="7"
+REDHAT_SUPPORT_PRODUCT="centos"
+REDHAT_SUPPORT_PRODUCT_VERSION="7"
+
+3，
+

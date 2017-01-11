@@ -1,0 +1,171 @@
+1，host模式
+Docker使用了Linux的Namespaces技术来进行资源隔离，如PID Namespace隔离进程，Mount Namespace隔离文件系统，Network Namespace隔离网络等。一个Network Namespace提供了一份独立的网络环境，包括网卡、路由、Iptable规则等都与其他的Network Namespace隔离。一个Docker容器一般会分配一个独立的Network Namespace。但如果启动容器的时候使用host模式，那么这个容器将不会获得一个独立的Network Namespace，而是和宿主机共用一个Network Namespace。容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口；
+2 container模式
+
+在理解了host模式后，这个模式也就好理解了。这个模式指定新创建的容器和已经存在的一个容器共享一个Network Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过lo网卡设备通信
+3 none模式
+
+这个模式和前两个不同。在这种模式下，Docker容器拥有自己的Network Namespace，但是，并不为Docker容器进行任何网络配置。也就是说，这个Docker容器没有网卡、IP、路由等信息。需要我们自己为Docker容器添加网卡、配置IP等。
+
+4 bridge模式
+
+bridge模式是Docker默认的网络设置，此模式会为每一个容器分配Network Namespace、设置IP等，并将一个主机上的Docker容器连接到一个虚拟网桥上
+    该模式关于主机内部的网络管理: 每个容器内部的虚拟网卡都和主机的一个虚拟网卡对应，所有容器内的虚拟网卡都都可以与主机通信
+
+
+
+转载请注明来自:http://blog.csdn.net/wsscy2004
+
+网络基础
+
+
+Docker使用linux桥接，在主机虚拟一个docker0网络接口，在主机中运行命令查看：
+
+# List host bridges
+$ sudo brctl showbridge name bridge id STP enabled interfacesdocker0 8000.000000000000 no
+
+# Show docker0 IP address
+$ sudo ifconfig docker0docker0 Link encap:Ethernet HWaddr xx:xx:xx:xx:xx:xx
+inet addr:172.17.42.1 Bcast:0.0.0.0 Mask:255.255.0.0
+
+docker启动一个Container时会会根据docker0的网段划分container的IP,docker0是每个container的网关。
+
+自定义网络范围
+
+
+尽管docker在使用linux brigde会找最合适的。但是有时候我们还是需要自己规划。
+
+使用-b=<bridgename>参数设置
+
+# 先关闭docker
+$ sudo service docker stop
+
+# 关闭网桥docker0# 添加自己的网桥bridge0
+$ sudo ifconfig docker0 down
+$ sudo brctl addbr bridge0
+$ sudo ifconfig bridge0 192.168.227.1 netmask 255.255.255.0
+
+# 向Docker startup file中添加启动自定义网桥参数
+$ echo "DOCKER_OPTS=\"-b=bridge0\"" >> /etc/default/docker
+
+# 启动Docker
+$ sudo service docker start
+
+# 查看自定义网桥是否启动成功，ip等配置是否正确
+$ sudo ifconfig bridge0
+bridge0 Link encap:Ethernet HWaddr xx:xx:xx:xx:xx:xx
+inet addr:192.168.227.1 Bcast:192.168.227.255 Mask:255.255.255.0
+
+# 启动container
+docker run -i -t base /bin/bash
+
+# 可以看到Container IP 在网段192.168.227/24内
+root@261c272cd7d5:/# ifconfig eth0
+eth0 Link encap:Ethernet HWaddr xx:xx:xx:xx:xx:xx
+inet addr:192.168.227.5 Bcast:192.168.227.255 Mask:255.255.255.0
+
+# bridge0 IP as the default gateway# 查看路由信息
+root@261c272cd7d5:/# route -n
+Kernel IP routing table
+Destination Gateway Genmask Flags Metric Ref Use Iface
+0.0.0.0 192.168.227.1 0.0.0.0 UG 0 0 0 eth0
+192.168.227.0 0.0.0.0 255.255.255.0 U 0 0 0 eth0
+
+# hits CTRL+P then CTRL+Q to detach
+
+# 查看网桥信息
+$ sudo brctl show
+bridge name bridge id STP enabled interfaces
+bridge0 8000.fe7c2e0faebd no vethAQI2QT
+container互通
+
+
+docker默认是允许container互通，通过-icc=false关闭互通。
+
+一旦关闭了互通，只能通过-link name:alias命令连接指定container.
+
+
+container互相隔离的情况下，假设我们有一个webapp container,一个redis contianer需要互通。
+
+先启动redis container:
+
+sudo docker run -d --name redis crosbymichael/redis
+
+再启动webapp并联通到redis
+
+#将redis取别名为dbsudo docker run -t -i --link redis:db --name webapp ubuntu bash
+
+在webapp中可以看到db的网络信息：
+
+$ root@4c01db0b339c:/# env
+
+HOSTNAME=4c01db0b339c
+DB_NAME=/webapp/db
+TERM=xterm
+DB_PORT=tcp://172.17.0.8:6379
+DB_PORT_6379_TCP=tcp://172.17.0.8:6379
+DB_PORT_6379_TCP_PROTO=tcp
+DB_PORT_6379_TCP_ADDR=172.17.0.8
+DB_PORT_6379_TCP_PORT=6379
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+SHLVL=1
+HOME=/
+container=lxc
+_=/usr/bin/env
+root@4c01db0b339c:/#
+
+0.11版本以后，-- link redis:db的别名，会在/etc/hosts中生成对应的ip映射:
+
+root@6541a75d44a0:/# cat /etc/hosts172.17.0.3 6541a75d44a0172.17.0.2 db
+什么是vethxxxx
+
+# 查看网桥信息
+$ sudo brctl show
+bridge name bridge id STP enabled interfaces
+docker0 8000.fe7c2e0faebd no vethAQI2QT
+
+vethxxx是主机与container内部eth0相连的管道。详见ip link和namespaces infrastructure
+
+更多
+
+
+pipework可以创建各种复杂的containers互通的场景。详见here
+
+配置 docker0 网桥
+
+
+Docker 服务默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。
+
+
+Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），
+
+
+通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。
+
+
+--bip=CIDR -- IP 地址加掩码格式，例如 192.168.1.5/24
+--mtu=BYTES -- 覆盖默认的 Docker mtu 配置
+也可以在配置文件中配置 DOCKER_OPTS，然后重启服务。 由于目前 Docker 网桥是 Linux 网桥，用户可以使用 brctl show 来查看网桥和端口连接信息。
+
+
+$ sudo brctl show
+bridge name bridge id STP enabled interfaces
+docker0 8000.3a1d7362b4ee no veth65f9
+vethdda6
+注：brctl 命令在 Debian、Ubuntu 中可以使用 sudo apt-get install bridge-utils 来安装。
+每次创建一个新容器的时候，Docker 从可用的地址段中选择一个空闲的 IP 地址分配给容器的 eth0 端口。使用本地主机上 docker0 接口的 IP 作为所有容器的默认网关。
+
+
+$ sudo docker run -i -t --rm base /bin/bash
+$ ip addr show eth0
+24: eth0: <BROADCAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+link/ether 32:6f:e0:35:57:91 brd ff:ff:ff:ff:ff:ff
+inet 172.17.0.3/16 scope global eth0
+valid_lft forever preferred_lft forever
+inet6 fe80::306f:e0ff:fe35:5791/64 scope link
+valid_lft forever preferred_lft forever
+$ ip route
+default via 172.17.42.1 dev eth0
+172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.3
+$ exit

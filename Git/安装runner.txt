@@ -1,0 +1,7 @@
+°²×°Runner
+
+./runner.sh
+gitlab-ci-multi-runner verify
+gitlab-ci-multi-runner register -n --executor shell -r ff7fc31665aa8038b555eba1a3659e -u http://10.31.58.171/ci
+nohup gitlab-ci-multi-runner run > runner.log &
+

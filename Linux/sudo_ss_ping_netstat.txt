@@ -1,0 +1,74 @@
+
+sudo -i 切换到root用户
+
+
+非root用户，执行sudo时需要输入密码；若在程序自动调用，可进行设置：
+1.chmod u+w /etc/sudoers  ----添加文件的写权限
+2. vi  /etc/sudoers                
+3.  修改%sudo ALL=(ALL:ALL) NOPASSWD:ALL
+4. chmod u-w /etc/sudoers  -----撤销文件的写权限
+
+*** is not in the sudoers file. This incident will be reported
+
+使用sudo命令时，出现上述错误
+解决方法：
+1）进入超级用户模式。也就是输入"su -",系统会让你输入超级用户密码，输入密码后就进入了超级用户模式。（当然，你也可以直接用root用） 
+2）添加文件的写权限。也就是输入命令"chmod u+w /etc/sudoers"。 
+3）编辑/etc/sudoers文件。也就是输入命令"vim /etc/sudoers",输入"i"进入编辑模式，找到这一 行："root ALL=(ALL) ALL"在起下面添加"xxx ALL=(ALL) ALL"(这里的xxx是你的用户名)，然后保存（就是先按一 下Esc键，然后输入":wq"）退出。 
+
+注：
+ALL=(ALL:ALL) ALL
+
+用户=（用户：用户组）命令
+
+
+4）撤销文件的写权限。也就是输入命令"chmod u-w /etc/sudoers"
+Linux系统下普通用户无法正常使用ping
+
+Linux系统下，普通用户使用ping命令返回ping: icmp open socket: Operation not permitted错误输出，但root用户可以正常使用该命令。
+
+原因分析：
+
+ping命令在运行中采用了ICMP协议，需要发送ICMP报文。但是只有root用户才能建立ICMP报文。而正常情况下，ping命令的权限应为-rwsr-xr-x，即带有suid的文件，一旦该权限被修改，则普通用户无法正常使用该命令。
+
+解决方案：
+
+使用root用户执行chmod u+s /bin/ping
+
+PS：docker exec ping ....——>是进入容器执行ping 命令
+
+注：如果只有TCP或UDP协议，则用ping不行，用telnet
+
+
+
+ss命令
+
+来自: http://man.linuxde.net/ss
+ss命令
+
+来自: http://man.linuxde.net/ss
+ss命令
+
+ss命令用来显示处于活动状态的套接字信息。ss 命令可以用来获取socket统计信息，它可以显示和netstat类似的内容。但ss的优势在于它能够显示更多更详细的有关TCP和连接状态的信息，而 且比netstat更快速更高效。 当服务器的socket连接数量变得非常大时，无论是使用netstat命令还是直接cat /proc/net/tcp，执行速度都会很慢。可能你不会有切身的感受，但请相信我，当服务器维持的连接达到上万个的时候，使用netstat等于浪费 生命，而用ss才是节省时间。 天下武功唯快不破。ss快的秘诀在于，它利用到了TCP协议栈中tcp_diag。tcp_diag是一个用于分析统计的模块，可以获得Linux 内核中第一手的信息，这就确保了ss的快捷高效。当然，如果你的系统中没有tcp_diag，ss也可以正常运行，只是效率会变得稍慢。
+
+来自: http://man.linuxde.net/ss
+ss命令用来显示处于活动状态的套接字信息。ss 命令可以用来获取socket统计信息，它可以显示和netstat类似的内容。但ss的优势在于它能够显示更多更详细的有关TCP和连接状态的信息，而 且比netstat更快速更高效。 当服务器的socket连接数量变得非常大时，无论是使用netstat命令还是直接cat /proc/net/tcp，执行速度都会很慢。可能你不会有切身的感受，但请相信我，当服务器维持的连接达到上万个的时候，使用netstat等于浪费 生命，而用ss才是节省时间。 天下武功唯快不破。ss快的秘诀在于，它利用到了TCP协议栈中tcp_diag。tcp_diag是一个用于分析统计的模块，可以获得Linux 内核中第一手的信息，这就确保了ss的快捷高效。当然，如果你的系统中没有tcp_diag，ss也可以正常运行，只是效率会变得稍慢。
+
+来自: http://man.linuxde.net/ss
+ss命令用来显示处于活动状态的套接字信息。ss 命令可以用来获取socket统计信息，它可以显示和netstat类似的内容。但ss的优势在于它能够显示更多更详细的有关TCP和连接状态的信息，而 且比netstat更快速更高效。 当服务器的socket连接数量变得非常大时，无论是使用netstat命令还是直接cat /proc/net/tcp，执行速度都会很慢。可能你不会有切身的感受，但请相信我，当服务器维持的连接达到上万个的时候，使用netstat等于浪费 生命，而用ss才是节省时间。 天下武功唯快不破。ss快的秘诀在于，它利用到了TCP协议栈中tcp_diag。tcp_diag是一个用于分析统计的模块，可以获得Linux 内核中第一手的信息，这就确保了ss的快捷高效。当然，如果你的系统中没有tcp_diag，ss也可以正常运行，只是效率会变得稍慢
+
+来自: http://man.linuxde.net/ss
+ss命令用来显示处于活动状态的套
+
+来自: http://man.linuxde.net/ss
+ss命令用来显示处于活动状态的套
+
+来自: http://man.linuxde.net/ss
+ss命令用来显示处于活动状态的套
+
+来自: http://man.linuxde.net/ss
+用来显示处于活动状态的套接字，可以用于获取Socket的统计信息。与netstat类似，比netstat更快更高效，统计信息更详细
+当socket连接数特别大时，netstat和 cat /pro/net/tcp执行速度会很慢；ss依赖TCP协议栈中的tcp_diag(用于分析统计的模块)，如果系统中没有tcp_diag，则ss速度会变慢
+
+
+

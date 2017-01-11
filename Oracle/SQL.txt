@@ -1,0 +1,161 @@
+场景：
+   数据资产应用中的自助分析中的自定义查询，设置好查询条件，点击查询报错。
+ 
+   由于系统的查询是页面通过“统一视图”T 用户数据库来查询“资源管理”用户的数据库，而自定义查询的表A实际就是“资源管理”Z 用户的表， 查询不到则是 T 未曾对 A表 创建同义词。
+  
+1，创建同义词：create or replace synonym NEW_TABLE_NAME for Z_USER_NAME.TABLE_NAME@T_USER_NAEM;
+
+    其中 NEW_TABLE_NAME是表A在T中的新名字（同义词）， Z_USER_NAME是表所在的数据库用户名，
+    TABLE_NAME 是表名，T_USER_NAEM是T数据库的用户名
+
+	eg: create or replace synonym DI_HY for J1_DI_ZJ.DI_HY@ZJSJCK_168;
+
+注：
+ 1）同义词，即别名，与视图功能类似，是一种映射关系。
+   可以节省大量数据库空间，经常用于简化对象的访问、提高访问对象的安全性。与视图类似，同义词不占用实际的存储空间，只在数据字典中保留对同义词的定义。
+
+    创建同义词：
+     create or replace [public] synonym syn_name for ob_name [@dblink]
+
+    Oracle同义词分为：
+	公用同义词——DBA创建，或拥有 create public synonym系统权限；
+		
+		create synonym sysn_test for test;
+    
+	私用同义词——普通用户
+		
+		create public synonym public_test for test;
+
+ 2）数据字典是Oracle数据库中最重要的部分之一，它是一系列只读的表，用来提供数据库信息。
+
+    数据字典包括：
+
+	所有方案对象的定义，如：表、视图、索引、聚簇、同义词、序列、过程、函数、包、触发器等；
+
+	分配给方案对象的空间，以及当前使用情况；
+
+	列的默认值；
+
+	完整性约束信息；
+
+	Oracle用户的名称；
+
+	用户被授予的权限和角色；
+
+	审计信息；
+
+	其他的数据库信息。			    
+			   / 基表		以USER_（存当前用户的信息）、ALL_（存当前用户可以访问的信息）
+    数据字典中包括两部分信息		       /  和DBA_开头的视图（存储数据的所有信息）
+   		           \提供给用户访问的视图	   
+					       \以V_$开头的视图——动态性能表，记录Oracle当前的活动信息
+					      
+    所有的数据字典都保存在SYSTEM表空间中。
+    所有的数字字典属于SYS用户。
+
+    主要有三种用途：
+	Oracle访问数据字典来获取用户、方案对象和存储结构等信息；
+	一旦有DDL语句发出，Oracle会相应地修改数据字典；
+	任何数据库用户可以把数据字典当做一个只读的参考，来获取数据库信息。
+
+2，登录1机器的A用户，查询2机器 数据库（DBNAME）的B用户（B_NAME）的表（TABLE_NAME）
+	
+	select * from B_NAME.TABLE_NAME@DBNAME;
+
+查看Oracle当前用户下的信息（用户，表视图，索引，表空间，同义词，存储过程函数，约束条件）
+
+
+
+======================================================
+0、表空间
+
+SQL>select username,default_tablespace from user_users;
+查看当前用户的角色
+SQL>select * from user_role_privs;
+查看当前用户的系统权限和表级权限
+SQL>select * from user_sys_privs;
+SQL>select * from user_tab_privs;
+查看用户下所有的表
+SQL>select * from user_tables;
+
+1、用户
+
+查看当前用户的缺省表空间
+SQL>select username,default_tablespace from user_users;
+查看当前用户的角色
+SQL>select * from user_role_privs;
+查看当前用户的系统权限和表级权限
+SQL>select * from user_sys_privs;
+SQL>select * from user_tab_privs;
+显示当前会话所具有的权限
+SQL>select * from session_privs;
+显示指定用户所具有的系统权限
+SQL>select * from dba_sys_privs where grantee='GAME';
+　　
+2、表
+
+	查看用户下所有的表
+		SQL>select * from user_tables;
+	查看名称包含log字符的表
+		SQL>select object_name,object_id from user_objects
+		where instr(object_name,'LOG')>0;
+	查看某表的创建时间
+		SQL>select object_name,created from user_objects where object_name=upper('&table_name');
+	查看某表的大小
+		SQL>select sum(bytes)/(1024*1024) as "size(M)" from user_segments
+		where segment_name=upper('&table_name');
+	查看放在ORACLE的内存区里的表
+		SQL>select table_name,cache from user_tables where instr(cache,'Y')>0;
+
+3、索引
+
+	查看索引个数和类别
+		SQL>select index_name,index_type,table_name from user_indexes order by table_name;
+	查看索引被索引的字段
+		SQL>select * from user_ind_columns where index_name=upper('&index_name');
+	查看索引的大小
+		SQL>select sum(bytes)/(1024*1024) as "size(M)" from user_segments
+		  where segment_name=upper('&index_name');
+　
+4、序列号
+	查看序列号，last_number是当前值
+		SQL>select * from user_sequences;
+　　
+5、视图
+	查看视图的名称
+		SQL>select view_name from user_views;
+	查看创建视图的select语句
+		SQL>set view_name,text_length from user_views;
+		SQL>set long 2000; 说明：可以根据视图的text_length值设定set long 的大小
+		SQL>select text from user_views where view_name=upper('&view_name');
+
+6、同义词
+	查看同义词的名称
+	SQL>select * from user_synonyms;
+　　
+7、约束条件
+
+	查看某表的约束条件
+		SQL>select constraint_name, constraint_type,search_condition, r_constraint_name
+		from user_constraints where table_name = upper('&table_name');
+		SQL>select c.constraint_name,c.constraint_type,cc.column_name
+		from user_constraints c,user_cons_columns cc
+		where c.owner = upper('&table_owner') and c.table_name = upper('&table_name')
+		and c.owner = cc.owner and c.constraint_name = cc.constraint_name
+		order by cc.position;
+　　
+8、存储函数和过程
+
+	查看函数和过程的状态
+	 SQL>select object_name,status from user_objects where object_type='FUNCTION';
+	SQL>select object_name,status from user_objects where object_type='PROCEDURE';
+	查看函数和过程的源代码
+	SQL>select text from all_source where owner=user and name=upper('&plsql_name');
+
+9，清空表数据
+
+   truncate table table_name;
+
+10，查询表属于哪一个用户
+	
+   select owner from dba_tables where table_name='TNAME'; 

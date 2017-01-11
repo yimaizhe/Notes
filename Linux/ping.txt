@@ -1,0 +1,7 @@
+ Ubuntu 虚拟机能上网，但ping不通外网
+ 
+ 1，查看是否禁ping
+     cat /proc/sys/net/ipv4/icmp_echo_ignore_all
+     0： 允许ping ； 1：禁ping
+2，原因：宿主机设置了虚拟WiFi，对本地连接进行共享。
+     取消共享，就可以ping通。

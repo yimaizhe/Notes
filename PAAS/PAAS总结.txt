@@ -1,0 +1,39 @@
+在PAAS工作一年半，总结
+
+PAAS（用别人的锅做饭在家吃），平台即服务，与SAAS（用别人的锅做饭在别人处吃）、IAAS（自己买锅做饭在家吃）区别；
+
+分布式系统，分为管理端，交易端和节点。
+其中管理端包括
+1，master——处理各种业务逻辑，管理应用相关的东西，如版本和配置还有模板，管理资源的分配和回收，
+	还有运行时调度，维持实例数和自动伸缩，相当于大脑；
+	通过Rest与adapter、svn通信，通过mom与node、loadbalance、monitor、logcollector、router通信；
+2，adapter——管理基础设施（IAAS），管理集群（增删改查），管理node,管理网络类型、网络IP；
+	通过rest与node、master通信，通过mom与loadbalance通信
+
+3，svn——仓库，保存应用的部署包（非docker模式），资源版本信息；
+
+4，loadbalance——负载均衡模块，实时收集node节点和应用的实时运行状态，传给master/adapter，
+	根据运行状态分配调用请求，使负载平均分配到各个应用实例上；
+	主要包括
+
+5, cloudui——前台页面，接收用户信息响应给后台
+
+流水端
+
+6，router——路由，
+
+节点端
+
+logcollector——扫描各模块日志文件（解析的日志放入缓存区，达到一定数量，一次性保存到mongodb	）
+	监听端口65531,等待node推送mom地址；获得mom地址后修改配置文件，重启启动mom去请求master，
+	获取mongodb地址和相关参数
+
+node——虚拟节点代理，包括基础功能、节点资源采集、心跳、NEU，插件管理几个部分，
+
+	通过“心跳”功能与LoadBalancer进行交互；
+	通过“基础功能”中的“通讯”功能接收AppMaster的管理指令；
+	通过“节点资源采集”，调用系统接口获取当前节点的资源信息；
+	通过“通讯”功能与SVN交互回去应用、容器、插件资源包；
+
+	支持JMS，TCP的C/S模式，用于AppMaster（部署启动停止卸载映射）、LoadBalancer（心跳）、AppSVN（部署资源）间的通讯
+	支持REST，与adapter通讯，获得网络信息、相关参数

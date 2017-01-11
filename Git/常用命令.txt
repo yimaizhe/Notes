@@ -1,0 +1,2 @@
+1,git config -l
+	查看本地git配置

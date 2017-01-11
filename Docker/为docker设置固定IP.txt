@@ -1,0 +1,61 @@
+为docker配置固定ip
+首先，配置一个用于创建container interface的网桥，可以使用ovs，也可以使用Linux bridge，以Linux bridge为例：
+
+复制代码
+代码如下:
+
+br_name=docker
+brctl addbr $br_name
+ip addr add 192.168.33.2/24 dev $br_name
+ip addr del 192.168.33.2/24 dev em1
+ip link set $br_name up
+brctl addif $br_name eth0
+
+接着，可以启动容器了，注意用--net=none方式启动：
+
+复制代码
+代码如下:
+
+# start new container
+hostname='docker.test.com'
+cid=$(docker run -d -i -h $hostname --net=none -t centos)
+pid=$(docker inspect -f '{{.State.Pid}}' $cid)
+
+下面，为该容器配置网络namespace，并设置固定ip：
+
+复制代码
+代码如下:
+
+# set up netns
+mkdir -p /var/run/netns
+ln -s /proc/$pid/ns/net /var/run/netns/$pid
+# set up bridge
+ip link add q$pid type veth peer name r$pid
+brctl addif $br_name q$pid
+ip link set q$pid up
+# set up docker interface
+fixed_ip='192.168.33.3/24'
+gateway='192.168.33.1'
+ip link set r$pid netns $pid
+ip netns exec $pid ip link set dev r$pid name eth0
+ip netns exec $pid ip link set eth0 up
+ip netns exec $pid ip addr add $fixed_ip dev eth0
+ip netns exec $pid ip route add default via 192.168.33.1
+
+这 样，容器的网络就配置好了，如果容器内部开启了sshd服务，通过192.168.33.3就可以直接ssh连接到容器，非常方便。上面的步骤比较长，可 以借助pipework来为容器设置固定ip（除了设置IP，还封装了配置网关、macvlan、vlan、dhcp等功能）：
+
+复制代码
+代码如下:
+
+pipework docker0 be8365e3b2834 10.88.88.8/24
+
+那么，当容器需要删除的时候，怎么清理网络呢，其实也很简单：
+
+复制代码
+代码如下:
+
+# stop and delete container
+docker stop $cid
+docker rm $cid
+# delete docker's net namespace (also delete veth pair)
+ip netns delete $pid

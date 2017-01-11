@@ -1,0 +1,434 @@
+
+调用rest接口的get方法：
+WebTarget web=webtarget(ip).path(node).path(register);
+String result=this.addAuthHeader( web.request(), new Data() ,"name","pwd" ).get(String.class);
+
+背景
+
+多年来，开发人员使用各种工具在其 Java 应用程序内创建 RESTful 服务。由于 REST 架构的简单性，主要需求 — 接收 HTTP 消息和头部的能力 — 可以由一个简单的 Java Web 容器实现。
+
+Java servlets 常被用来开发 RESTful 应用程序。如何使用 servlet 并没有固定的模式。通常，servlet 会接受请求并自己解析这个 HTTP 请求 URI，以将此请求与一个已知资源相匹配。对于 REST 服务开发，这个简单的 servlet 模型以更为正式的 API 得到扩展。但是，因为这些 API 是在 servlet 模型之上开发的，所以这些 API 中没有一个是作为正式的标准开发的。
+
+随着 REST 越来越多地被采用为一种架构，Java Community Process (JCP) 计划在未来的 Java Enterprise Edition 6 发布版中包括对 REST 的正式支持。JSR-311 也已创建好，并已有了 JAX-RS 1.0 规范，提供了一种新的基于注释的方式来开发 RESTful 服务。与 servlet 模型相比，JAX-RS 注释让您能集中于您的资源和数据对象。并且，您不必再开发通讯层（通过 servlet）。
+
+
+Java 资源
+
+JAX-RS 建立了一种特殊的语言来描述资源，正如由其编程模型所表示的。有五种主要条目：根资源、子资源、资源方法、子资源方法以及子资源定位器。
+根资源
+
+根资源是由 @Path 注释的 Java 类。@Path 注释提供了一个 value 属性，用来表明此资源所在的路径。value 属性可以是文本字符、变量或变量外加一个定制的正则表达式。清单 1 给出了一个例子。
+清单 1. JAX-RS 根资源
+
+package com.ibm.jaxrs.sample.organization;
+
+import javax.ws.rs.Path;
+
+@Path(value="/contacts")
+public class ContactsResource {
+        ...
+}
+
+子资源
+
+子资源是作为 subresource locator 调用的结果返回的 Java 类。它们类似于根资源，只不过它们不是由 @Path 注释的，因它们的路径是由子资源定位器给出的。子资源通常包含由 HTTP 请求方法指示符（designator）注释的方法以便服务此请求。如果它们不包含如此注释的方法，那么它们将会通过指派给合适的子资源定位器来进一步解析此资源处理请求。
+清单 2. JAX-RS 子资源
+
+package com.ibm.jaxrs.sample.organization;
+
+import javax.ws.rs.GET;
+
+public class Department {
+        
+
+        
+        @GET
+        public String getDepartmentName() {
+                ...
+        }
+        
+
+        
+}
+
+如上所示的清单 2 展示了由 ContactsResource.getContactDepartment 方法返回的子资源。在这个例子中，如果一个 HTTP GET 请求被发送给 /contact/{contactName}/department 路径，那么 Department 子资源内的 getDepartmentName 资源方法就会处理此请求。
+资源方法
+
+资源方法是根资源或子资源内绑定到 HTTP 方法的 Java 方法。绑定是通过诸如 @GET 这样的注释完成的。
+清单 3. JAX-RS 资源方法
+
+package com.ibm.jaxrs.sample.organization;
+
+import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+@Path(value="/contacts")
+public class ContactsResource {
+        
+        
+        
+        @GET
+        public List<ContactInfo> getContacts() {
+                ...
+        }
+        
+
+}
+
+在清单 3 的例子中，发送到 /contacts 路径的 HTTP GET 请求将会由 getContacts() 资源方法处理。
+子资源方法
+
+子资源方法非常类似于资源方法；惟一的区别是子资源方法也是由 @Path 注释的，此注释进一步限定了该方法的选择。
+清单 4. JAX-RS 子资源方法
+
+package com.ibm.jaxrs.sample.organization;
+
+import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
+@Path(value="/contacts")
+public class ContactsResource {
+        
+        @GET
+        public List<ContactInfo> getContacts() {
+                ...
+        }
+        
+        
+        
+        @GET
+        @Path(value="/ids")
+        public List<String> getContactIds() {
+                ...
+        }
+        
+
+}
+
+在清单 4 中，发送到 /contacts/ids 路径的 HTTP GET 请求将会由 getContactIds() 子资源方法处理。
+子资源定位器
+
+子资源定位器是能进一步解析用来处理给定请求的资源的一些方法。它们非常类似于子资源方法，因它们具备一个 @Path 注释，但不具备 HTTP 请求方法指示符，比如 @GET 注释。
+清单 5. JAX-RS 子资源定位器
+
+package com.ibm.jaxrs.sample.organization;
+
+import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+@Path(value="/contacts")
+public class ContactsResource {
+        
+        @GET
+        public List<ContactInfo> getContactss() {
+                ...
+        }
+        
+                @GET
+        @Path(value="/ids")
+        public List<String> getContactIds() {
+                ...
+        }
+        
+        
+        
+        @Path(value="/contact/{contactName}/department")
+        public Department getContactDepartment(@PathParam(value="contactName") 
+                String contactName) {
+                ...
+        }
+        
+
+}
+
+在上述例子中，对 /contact/{contactName}/department 路径的任何 HTTP 请求都将由 getContactDepartment 子资源定位器处理。 {contactName} 部分表明 contact 路径部分之后可以是任何合法的 URL 值。
+
+回页首
+注释
+
+本节将会探讨一些重要的注释及其使用。对于由 JAX-RS 规范提供的注释的完整列表，可以参考本文的 参考资料 部分给出的 JSR-311 链接。
+@Path
+
+@Path 注释被用来描述根资源、子资源方法或子资源的位置。value 值可以包含文本字符、变量或具有定制正则表达式的变量。清单 6 的例子展示了 @Path 注释的主要应用。
+清单 6. @Path 的使用
+
+package com.ibm.jaxrs.sample.organization;
+
+import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+@Path(value="/contacts")
+public class ContactsResource {
+
+                
+        @GET
+        @Path(value="/{emailAddress:.+@.+\\.[a-z]+}")
+        public ContactInfo getByEmailAddress(@PathParam(value="emailAddress") 
+                String emailAddress) {
+                ...
+        }
+        
+        @GET
+        @Path(value="/{lastName}")
+        public ContactInfo getByLastName(@PathParam(value="lastName") String lastName) {
+                ...
+        }
+}
+
+ContactsResource 类上的注释表明对 /contacts 路径的所有请求都将由 ContactsResource 根资源处理。getByEmailAddress 上的 @Path 注释则表明任何发送到 /contacts/{emailAddress} 的请求（其中 emailAddress 代表的是正则表达式 .+@.+\\.[a-z]+）都将由 getByEmailAddress 处理。
+
+getByLastName 方法上的 @Path 注释指定了发送到 /contacts/{lastName} 路径的所有请求（其中 lastName 代表的是一个与 getByEmailAddress 内的正则表达式不匹配的有效的 URL 部分）都将由 getByLastName 方法处理。
+@GET、@POST、@PUT、@DELETE、@HEAD
+
+@GET、@POST、@PUT、@DELETE 以及 @HEAD 均是 HTTP 请求方法指示符注释。您可以使用它们来绑定根资源或子资源内的 Java 方法与 HTTP 请求方法。HTTP GET 请求被映射到由 @GET 注释的方法；HTTP POST 请求被映射到由 @POST 注释的方法，以此类推。用户可能还需要通过使用 @HttpMethod 注释定义其自己的定制 HTTP 请求方法指示符。
+清单 7. 定制的 HTTP 请求方法指示符注释
+
+package com.ibm.jaxrs.sample.organization;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import javax.ws.rs.HttpMethod;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@HttpMethod("GET")
+public @interface CustomGET {
+
+}
+
+上述的声明定义了 @CustomGET 注释。此注释将具有与 @GET 注释相同的语义值并可用在其位置上。
+@Conumes 和 @Produces
+
+@Consumes 注释代表的是一个资源可以接受的 MIME 类型。@Produces 注释代表的是一个资源可以返回的 MIME 类型。这些注释均可在资源、资源方法、子资源方法、子资源定位器或子资源内找到。
+清单 8. @Consumes/@Produces
+
+package com.ibm.jaxrs.sample.organization;
+
+import java.util.List;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+@Path(value="/contacts")
+public class ContactsResource {
+
+                
+        @GET
+        @Path(value="/{emailAddress:.+@.+\\.[a-z]+}")
+        @Produces(value={"text/xml", "application/json"})
+        public ContactInfo getByEmailAddress(@PathParam(value="emailAddress") 
+                String emailAddress) {
+                ...
+        }
+        
+        @GET
+        @Path(value="/{lastName}")
+        @Produces(value="text/xml")
+        public ContactInfo getByLastName(@PathParam(value="lastName") String lastName) {
+                ...
+        }
+        
+        @POST
+        @Consumes(value={"text/xml", "application/json"})
+        public void addContactInfo(ContactInfo contactInfo) {
+                ...
+        }
+}
+
+对于上述的 getByEmailAddress 和 addContactInfo 方法，它们均能处理 text/xml 和 application/json。被接受或返回的资源表示将依赖于客户机设置的 HTTP 请求头。@Consumes 注释针对 Content-Type 请求头进行匹配，以决定方法是否能接受给定请求的内容。
+
+在清单 9 中，application/json 的 Content-Type 头再加上对路径 /contacts 的 POST，表明我们的 ContactsResource 类内的 addContactInfo 方法将会被调用以处理请求。
+清单 9. Content-Type 头部的使用
+
+POST /contacts HTTP/1.1
+Content-Type: application/json
+Content-Length: 32
+
+相反地，@Produces 注释被针对 Accept 请求头进行匹配以决定客户机是否能够处理由给定方法返回的表示。
+清单 10. Accept 头部的使用
+
+GET /contacts/johndoe@us.ibm.com HTTP/1.1
+Accept: application/json
+
+在清单 10 中，对 /contacts/johndoe@us.ibm.com 的 GET 请求表明了 getByEmailAddress 方法将会被调用并且返回的格式将会是 application/json，而非 text/xml。
+
+回页首
+Providers
+
+JAX-RS 提供程序是一些应用程序组件，允许在三个关键领域进行运行时行为的定制：数据绑定、异常映射以及上下文解析（比如，向运行时提供 JAXBContext 实例）。每个 JAX-RS 提供程序类必须由 @Provider 注释。如下的例子讨论了两个数据绑定提供程序 MessageBodyWriter 和 MessageBodyReader。
+MessageBodyWriter
+
+MessageBodyWriters 被 JAX-RS 运行时用来序列化所返回资源的表示。遵从 JSR-311 的运行时提供了对常见类型（java.lang.String、java.io.InputStream、 JAXB 对象等）的本机支持，但用户也可以向 JAX-RS 运行时提供他或她自己的 MessageBodyWriter。比如，您可以提供一个定制 MessageBodyWriter 来处理定制 ContactInfo Java 类型，如下所示。
+清单 11. 定制 MessageBodyWriter
+
+package com.ibm.jaxrs.sample.organization;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.ext.MessageBodyWriter;
+import javax.ws.rs.ext.Provider;
+
+@Provider
+@Produces("text/xml")
+public class ContactInfoWriter implements MessageBodyWriter<ContactInfo> {
+
+        public long     getSize(T t, java.lang.Class<ContactInfo> type, 
+                java.lang.reflect.Type genericType, java.lang.annotation.Annotation[] 
+                annotations, MediaType mediaType)  {
+                ...
+        }
+        
+        public boolean isWriteable(java.lang.Class<ContactInfo> type, 
+                java.lang.reflect.Type genericType, java.lang.annotation.Annotation[] 
+                annotations, MediaType mediaType) {
+                return true;
+        }
+        
+        public void writeTo(ContactInfo contactInfo, java.lang.Class<ContactInfo> type, 
+                java.lang.reflect.Type genericType, java.lang.annotation.Annotation[] 
+                annotations, MediaType mediaType, MultivaluedMap<
+                java.lang.String, java.lang.Object> httpHeaders, java.io.OutputStream 
+                entityStream) {
+                contactInfo.serialize(entityStream);
+        }
+}
+
+ContactInfoWriter 则在所返回的资源表示被序列化之前由 JAX-RS 运行时调用。如果 isWriteable 返回 true 且 @Produces 是此资源方法的 @Produces 值最为接近的匹配，就会调用 writeTo 方法。在这里，ContactInfoWriter 负责向底层的 OutputStream 序列化 ContactInfo 实例的内容。
+MessageBodyReader
+
+MessageBodyReaders 则与 MessageBodyWriters 相反。对于反序列化，JAX-RS 运行时支持与序列化相同的类型。用户也可以提供他或她自己的 MessageBodyReader 实现。MessageBodyReader 的最主要的功能是读取请求 InputStream 并将传入的字节反序列化到一个此资源方法期望的 Java 对象。ContactInfo 类型的 MessageBodyReader 可以类似于清单 12。
+清单 12. 定制 MessageBodyReader
+
+package com.ibm.jaxrs.sample.organization;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.ext.MessageBodyReader;
+import javax.ws.rs.ext.Provider;
+
+@Provider
+@Consumes("text/xml")
+public class ContactInfoReader implements MessageBodyReader<ContactInfo> {
+
+        public boolean isReadable(java.lang.Class<ContactInfo> type, 
+                java.lang.reflect.Type genericType, java.lang.annotation.Annotation[] 
+                annotations, MediaType mediaType) {
+                return true;
+        }
+        
+        public ContactInfo readFrom(java.lang.Class<ContactInfo> type, 
+                java.lang.reflect.Type genericType, java.lang.annotation.Annotation[] 
+                annotations, MediaType mediaType, MultivaluedMap<
+                java.lang.String,java.lang.String> httpHeaders, java.io.InputStream 
+                entityStream) {
+                return ContactInfo.parse(entityStream);
+        }
+        
+}
+
+与 MessageBodyWriter isWriteable 类似，ContactInfoReader 的 isReadable 方法将被调用以便决定 MessageBodyReader 能否处理此输入。如果 isReadable 返回 true 且 @Consumes 值与此资源方法的 @Consumes 值最为匹配，就会选择 ContactInfoReader。当 readFrom 方法被调用时，结果会是基于请求 InputStream 的内容创建 ContactInfo 实例。
+
+回页首
+配置
+
+至此，我们探讨了 JAX-RS 资源类和一些提供程序类（MessageBodyReaders 和 MessageBodyWriters）。那么，该如何在 JAX-RS 运行时内配置这些类呢？这可以通过扩展 javax.ws.rs.core.Application 类实现。此类提供了一组类或一组单例（singleton）对象实例，在一个 JAX-RS 应用程序内包括所有的 根级别的资源和提供程序（由 @Provider 注释的类）。若为这个示例联系信息应用程序扩展这个 Application 类，它应该类似于清单 13。
+清单 13. ContactInfoApplication
+
+package com.ibm.jaxrs.sample.organization;
+
+import java.util.HashSet;
+import java.util.Set;
+import javax.ws.rs.core.Application;
+
+public class ContactInfoApplicaiton extends Application {
+
+        public Set<Class<?>> getClasses() {
+                Set<Class<?>> classes = new HashSetSet<Class<?>>();
+                classes.add(ContactsResource.class);
+                classes.add(ContactInfoWriter.class);
+                classes.add(ContactInfoReader.class);
+        }
+        
+        public SetSet<Object<?>> getSingletons() {
+                // nothing to do, no singletons
+        }
+        
+}
+
+getClasses 方法为 JAX-RS 运行时提供了一组可用于元数据的类。请注意，getSingletons 方法什么都不返回。通常而言，将 JAX-RS 提供程序视为单例是没有问题的，但将一个 JAX-RS 资源视为单例则要格外谨慎。常被 JAX-RS 资源类使用的基于注释的注入可能在一个单例实例的情况内并不受支持。因此，除非仔细计划，否则应该避免使用 JAX-RS 资源的单例实例。
+
+假设，您正在一个 servlet 容器内部署一个 JAX-RS 应用程序，有两种方法可以向 JAX-RS 运行时注册您的 javax.ws.rs.core.Application 子类。这是由 WAR 文件的 web.xml 处理的，如下所示。
+清单 14. 不能感知 JAX-RS 的 servlet 容器
+
+<web-app id="WebApp_ID" version="2.5"
+        xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi=
+        "http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+        <servlet>
+                <servlet-name>ContactInfoServlet</servlet-name>
+                <servlet-class>com.sample.RESTSystemServlet</servlet-class>
+                <init-param>
+                        <param-name>javax.ws.rs.Application</param-name>
+                        <param-value>
+                                com.ibm.jaxrs.sample.organization.ContactInfoApplication
+                        </param-value>
+                </init-param>
+        </servlet>
+        <servlet-mapping>
+                <servlet-name>ContactInfoServlet</servlet-name>
+                <url-pattern>/*</url-pattern>
+        </servlet-mapping>
+</web-app>
+
+在一个被认为是不能感知 JAX-RS 的 servlet 容器内，应该作为 servlet 定义内的 init-param 提供 Application 子类名。init-param 的名字必须是 javax.ws.rs.Application。servlet 类则很可能是 JAX-RS 运行时系统 servlet。您可以列出每个可能的 URL 模式，或者使用 /* 通配符注册，如下所示。
+清单 15. 能感知 JAX-RS 的 servlet 容器
+
+<web-app id="WebApp_ID" version="2.5"
+        xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi=
+        "http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+        <servlet>
+                <servlet-name>ContactInfoServlet</servlet-name>
+                <servlet-class>
+                        com.ibm.jaxrs.sample.organization.ContactInfoApplication
+                </servlet-class>
+        </servlet>
+        <servlet-mapping>
+                <servlet-name>ContactInfoServlet</servlet-name>
+                <url-pattern>/*</url-pattern>
+        </servlet-mapping>
+</web-app>
+
+在一个被认为是能感知 JAX-RS 的 servlet 容器内，必须作为 servlet 定义内的 servlet 类元素的值提供 Application 子类名。您仍然可以选择是列出每个可能的 URL 模式还是使用 /* 通配符注册。
+
+回页首
+以 Apache Wink 作为运行时的 JAX-RS
+
+下一步是找到一个能够支持 JAX-RS 内的可用功能的运行时。Apache Wink 项目就提供了一个能满足这种要求的运行时，具有上面所述的所有特性（参见 参考资料）。起初，Wink 是由开源社区的多个厂商和成员发起的一个协作项目。该项目的目的是提供最为灵活和轻量级的运行时。
+
+除了标准 JAX-RS 特性之外，Wink 还提供了对 JSON、Atom 和 RSS 序列化格式的增强支持。JAX-RS 本身并不提供客户机 API，但 Wink 包括了其对客户机 API 的自身模型，并且是完全以资源为中心的。
+在 My developerWorks 上加入 Apache Wink 组
+
+在 My developerWorks Apache Wink 组 中与其他开发人员进行有关如何开发 Apache Wink 的主题讨论和资源共享。
+
+还不是 My developerWorks 的成员？ 现在就加入！
+
+为了简化基于 Wink 的服务的开发，可以下载 Wink 1.0 库并将它们作为默认 JAX-RS 库包括到 Rational Application Developer (RAD) 7.5.5 开发环境（参见 参考资料）中。在这个更新版本中，RAD 添加了一个 JAX-RS facet，可供您进行配置以支持验证器和注释帮助。这个新的 facet 还能通过自动生成所需的 servlet 项和映射来简化 servlet 的配置。
+结束语
+
+与 传统的 servlet 模型相比，JAX-RS 提供了一种可行的、更为简便、移植性更好的方式来在 Java 内实现 RESTful 服务。使用注释让您能够轻松提供 Java 资源的路径位置并将 Java 方法绑定到 HTTP 请求方法。一种可移植的数据绑定架构提供了一些本机的 Java 类型支持并允许进行序列化/反序列化处理的完全定制。javax.ws.rs.core. Application 子类的扩展以及 web.xml 内的相应清单表明了用最少的部署描述符配置就能进行轻松部署。
+
+本文只涉及了 JAX-RS 所能提供功能的一部分。就提供应用程序上下文（比如 JAXBContext 实例）并将运行时异常映射给 HTTP 请求而言，其他两个 JAX-RS 提供程序类型 ContextResolvers 和 ExceptionMappingProviders 还能提供对应用程序组件的进一步控制。注释的定义是为了控制方法参数和类成员的注入，它们在运行时的整个过程向应用程序提供了有价值的上下文信息。总的来说，JAX-RS 必将是一种面向基于 Java 的 RESTful 服务开发的简便、可移植的、全面的 API。

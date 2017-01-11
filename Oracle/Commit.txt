@@ -1,0 +1,19 @@
+Commit
+
+commit的提交针对的是:DML
+
+Data Manipulation Language(DML) 需要提交，这部分是对数据管理操作，比如Insert（插入）、Update（修改）、Delete（删除），
+Data Definition Language(DDL) 不需要提交，这部分是对数据结构定义，比如 Create（创建）、Alter（修改)、Drop（删除）
+
+如果在没有commit之前，就算你把整个表中数据都删了，如果rollback的话，数据依然能够还原。
+如果不执行COMMIT这个命令，那么在你这个session之外的其他session查询的数据是你修改数据之前的数据。而COMMIT之后人家查询的是你修改的数据。
+
+在未提交前你前面的操作更新的都是内存，没有更新到物理文件中。执行commit从用户角度讲就是更新到物理文件了，
+事实上commit时还没有写date file，而是记录了redo log file，要从内存写到data物理文件，需要触发检查点，
+由DBWR这个后台进程来写，这里内容有点多的，如果不深究的话你就理解成commit即为从内存更新到物理文件
+
+如insert，delete，update，select...for update都会同时触发表级锁和行级锁 
+
+insert以后commit之前是锁表的状态，其他事务无法对该表进行操作。
+
+如果不提交的话，那么这个表就被锁了 

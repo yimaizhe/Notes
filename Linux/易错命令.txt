@@ -1,0 +1,7 @@
+
+1，删除文件、文件夹
+       rm -f file
+       rm -rf filefloder
+2, 拷贝文件、文件夹
+     cp src_file des
+     cp -r src_floder des

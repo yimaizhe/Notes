@@ -1,0 +1,45 @@
+=====================================================
+*******                数据库链接                *****
+=====================================================
+像电话线一样，想通过本地数据库访问远程数据库中的表时，本地数据库就需要创建一个远程库的link;
+
+链接分为公用的（public）和私用的（private）
+
+eg:
+-- Create database link 
+create public database link ZJYY 
+  connect to j1_tyst  identified by oracle
+  using '(DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 10.126.3.100)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = sjck06)
+    )
+  )';
+
+ 其中：
+1， ZJYY是链接的名字，可以随便定义
+2， j1_tyst是远程数据库用户名，oracle 是密码
+3，using后可跟“connect_string”是数据库连接字符串；
+	数据库连接字符串是当前客户端数据库中TNSNAMES.ORA文件里定义的别名名称.
+    可以用NET8 EASY CONFIG或者直接修改TNSNAMES.ORA里定义.
+    也可直接建立链接（如本例，不受本地配置影响）：
+	SERVICE_NAME：数据库的ssid
+---------------
+查询
+    select * from dba_db_links; ——查询所有的链接
+
+    select * from tablesName@linkName; ——查询远程数据库的表
+
+删除
+    drop public database link LINK_NAME
+
+=====================================================
+*******  Ormapping(Object relational mapping)   *****
+=====================================================
+    对象关系映射，用于解决面向对象与关系数据库存在的互不匹配的问题。ORM是通过使用描述对象和数据库之间映射
+的元数据，将java程序中的对象自动持久化到关系数据库中；本质上就是讲数据从一种形式转换到另外一种形式。
+也就是将数据库中的数据模拟成对象，同时保留他们的关联关系
+
+

@@ -1,0 +1,19 @@
+1，创建数据卷容器（jdk）
+     docker run -d --name jdk1.7 -v /opt/paas/jdk centos_jdk:1.0
+2，创建mom容器，依赖数据卷容器
+      docker run -d --net=host --name MOM --volumes-from jdk1.7 centos_mom:1.0
+    
+     PS： 镜像需要改变为mom分配的内存大小，不然内存不足
+     ${JAVA_HOME}/bin/java ${JAVA_DEBUG} -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.port=8089 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authe
+nticate=false  -D64 -server -Xms2048m -Xmx3072m -cp . -jar run.jar Main
+
+3，
+每次重启node容器，
+source /etc/profile
+停止node，容器退出
+export cluster_id = ...
+
+保存镜像：
+     docker save centos_configercenter:1.0 > ccenter.tar
+加载镜像
+    

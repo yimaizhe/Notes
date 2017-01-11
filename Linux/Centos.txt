@@ -1,0 +1,80 @@
+安装软件：
+          sudo yum install softwareName
+(ubantu:  apt-get)
+
+机器上装两个虚机，1，Ubuntu ，2，centos。
+telnet 192.168.2.48 3306
+Trying 192.168.2.48...
+telnet: connect to address 192.168.2.48: No route to host
+telnet: Unable to connect to remote host: No route to host
+
+远程调试时连接不上centos,    1 ping 2,2 ping 1 都能ping通； 1 telnet 2 .失败
+
+2 telnet 1成功。centos防火墙问题，关闭防火墙： service firewalld stop. 解决。
+
+VM虚拟机装centos无法自动获取IP的解决方法
+
+在虚拟机VM里面装了centos系统，网卡选用桥接方式。
+
+刚开始的时候还能自动获取到IP地址，突然有一天IP消失了，再怎么重启都无法获取IP地址。因为之前是可以获取IP，而且 VMware NAT Service 和 VMware DHCP Service 两个已启动，没做任何的改动，所以配置肯定是没问题的。百思不得其解啊！！！
+后 来检查Edit--Virtual Network Editor...，进去以后看到VMnet0  Bridged Auto-bridging - - -  ，点选VMnet0，在VMnet Information里面，点击“Bridged to: ”后面的“Automatic”下拉菜单，发现有两个网卡，一个是VPN的，一个物理网卡。果断将“Automatic”更换为物理网卡，重新启动Centos系统，久违的IP回来了。PS：我的物理网卡连接的网络是自动分配IP的.
+
+CentOS配置网卡开机自动获取IP地址：
+
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+将 ONBOOT="no"  改为 ONBOOT="yes"
+
+保存后： service network restart
+
+查看IP：  ifconfig
+
+http://blog.csdn.net/typa01_kk/article/details/49058593
+
+1：检查是否安装MySQL：
+
+方法1：
+
+    [root@localhost ~]# yum list installed mysql*  
+    Loaded plugins: fastestmirror  
+    Loading mirror speeds from cached hostfile  
+     * base: mirrors.btte.net  
+     * extras: mirrors.btte.net  
+     * updates: mirrors.opencas.cn  
+    Error: No matching Packages to list  
+
+方法2：
+
+    [root@localhost ~]# rpm -qa | grep -i mysql  
+    [root@localhost ~]#   
+
+2：查看yum服务器可下载mysql的版本信息:
+
+    [root@localhost ~]# yum list | grep mysql  
+
+3：看着yum服务器有没有合适的安装包：
+
+    [root@localhost ~]# yum list mysql*  
+
+       
+
+安装前：注：之前安装过MySQL或者有残留，请查看:CentOS下MySQL的彻底卸载
+               注：遇到问题请查看：CentOS7安装MySQL冲突和问题解决小结
+
+4：yum安装MySQL：
+
+    #安装MySQL客户端  
+    [root@localhost ~]# yum install mysql  
+    #安装MySQL服务端  
+    [root@localhost ~]# yum install mysql-server  
+    #安装MySQL的库和头文件  
+    [root@localhost ~]# yum install mysql-devel  
+
+5, 安装deb
+
+	dpkg -i file.deb dpkg
+6, 强制解锁,命令 var/cache/apt/archives/lock
+	   sudo rm /var/cache/apt/archives/lock
+           sudo rm /var/lib/dpkg/lock
+
+7,使用ultraISO制作U盘启动盘时，格式化U盘使用FAT32，不用NTFS(linux不支持)

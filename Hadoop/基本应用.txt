@@ -1,0 +1,55 @@
+安装Hadoop 2.6（centos）
+
+	首先安装 ssh,pdsh；
+		java版本在1.7+
+
+	下载hadoop-2.6.5.tar.gz，解压。
+	修改etc/hadoop/hadoop-env.sh 中的java_home;
+	执行:  bin/hadoop
+
+三种模式：
+
+1，单机模式（local Mode）
+
+   eg:测试是否能正常运行，测试自带的jar
+	$ mkdir input
+	$ cp etc/hadoop/*.xml input
+	$ bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-alpha1.jar grep input output 'dfs[a-z.]+'
+	$ cat output/*
+
+	注：命令中 ‘share/.../*.jar’是指明相对路径的jar包，‘grep’是指jar包中，（包含包路径的）主函数所在的类；
+	    hadoop执行时出现的日志是程序执行的过程；
+	    input中存放待输入的文件；
+	    执行的结果在output中查看；
+	    每次运行前需要删除output文件夹，否则出错。
+     
+     测试自己的jar包时，将jar包放在一个目录下（如/home/test/my.jar）。
+     如jar包中main函数在com.dc.worldCount.class中,则执行时的命令为：
+     bin/hadoop jar /home/test/my.jar com.dc.worldCount input output
+
+     注：.class文件打成jar包 
+		jar cf name.jar className.class
+ 
+    出错：
+	Exception in thread "main" org.apache.hadoop.mapreduce.lib.input.InvalidInputException: Input path does not exist:hdfs://localhost:9000/user/hadoop/input
+at org.apache.hadoop.mapreduce.lib.input.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:323)
+
+	——配置伪分布式环境时，要对core-site.xml 文件进行修改，所以很可能是产生上述错误的原因：
+	关于hdfs://localhost:9000和配置文件 core-site.xml ：
+		vim /usr/local/hadoop/etc/hadoop/core-site.xml)
+
+	<configuration>  
+		<property>
+		       <name>hadoop.tmp.dir</name> 
+		       <value>file:/usr/local/hadoop/tmp</value>       
+		       <description>Abase for other temporary directories.</description> 
+		</property>    
+		<property>        
+			<name>fs.defaultFS</name>        
+			<value>hdfs://localhost:9000</value>    
+		</property>
+	</configuration>
+
+2，伪分布模式（Pseudo-Distributed Mode)
+
+3,

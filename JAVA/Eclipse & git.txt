@@ -1,0 +1,13 @@
+错误：rejected –non-fast-forward
+错误原因
+
+文件冲突，本地的代码和远程Repository中的文件个数不一致（即远程Repository中存在本地项目中不存在的文件）或本地得项目不是在远程Repository代码的基础上修改的。
+解决办法
+
+将远程Repository中的代码更新到本地，然后再进行Push，即可完成代码提交。
+
+Eclipse和工程都更换位置后，连不上git:
+
+重新生成ssh key,先使用git客户端试试能不能拉代码
+
+eclipse引入git代码后，在Java视图没有工程：git视图->右键->import project from git respository->import as general project

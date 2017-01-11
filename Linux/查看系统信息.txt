@@ -1,0 +1,59 @@
+https://www.kernel.org/
+
+1,查看版本：
+    "uname -a ",可显示电脑以及操作系统的相关信息
+
+    "cat /proc/version",说明正在运行的内核版本。
+
+    输入"cat /etc/issue", 显示的是发行版本信息
+
+    lsb_release -a (适用于所有的linux，包括Redhat、SuSE、Debian等发行版，但是在debian下要安装lsb)
+
+2,什么是rpm?
+
+    rpm文件是linux中一种常见的软件安装包的格式。
+
+    　　细节如下：
+
+    1.  RPM是RedHat Package Manager（RedHat软件包管理工具）的缩写，也就是最早是著名Linux版本：Redhat中使用的。
+
+    2.它是一种用于互联网下载包的打包及安装工具，它包含在某些Linux分发版中。它生成具有.RPM扩展名的文件。与Dpkg类似。
+
+    3.这一文件格式名称虽然打上了RedHat的标志，但是其原始设计理念是开放式的，现在包括OpenLinux、S.u.S.E.以及Turbo Linux等Linux的分发版本都有采用，可以算是公认的行业标准。
+
+3,查看使用情况
+
+    在Linux下查看内存我们一般用free命令：
+    [root@scs-2 tmp]# free
+             total       used       free     shared    buffers     cached
+    Mem:       3266180    3250004      16176          0     110652    2668236
+    -/+ buffers/cache:     471116    2795064
+    Swap:      2048276      80160    1968116
+
+   解释：
+    total:总计物理内存的大小。
+    used:已使用多大。
+    free:可用有多少。
+    Shared:多个进程共享的内存总额。
+    Buffers/cached:磁盘缓存的大小。
+
+   第三行(-/+ buffers/cached):
+    used:已使用多大。
+    free:可用有多少。
+
+   第二行(mem)的used/free与第三行(-/+ buffers/cache) used/free的区别。 这两个的区别在于使用的角度来看，第一行是从OS的角度来看，因为对于OS，buffers/cached 都是属于被使用，所以他的可用内存是16176KB,已用内存是3250004KB,其中包括，内核（OS）使用+Application(X, oracle,etc)使用的+buffers+cached.
+   第三行所指的是从应用程序角度来看，对于应用程序来说，buffers/cached 是等于可用的，因为buffer/cached是为了提高文件读取的性能，当应用程序需在用到内存的时候，buffer/cached会很快地被回收。
+    所以从应用程序的角度来说，可用内存=系统free memory+buffers+cached。
+    如上例：
+    2795064=16176+110652+2668236
+
+4,查看所有用户
+
+cat /etc/passwd
+
+
+5,设置环境变量
+
+/etc/profile 文件中设置
+
+rethat系统：在/etc/bashrc 中设置

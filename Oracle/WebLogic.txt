@@ -1,0 +1,18 @@
+1，weblogic安装时的“中间件主目录”与之后创建“域”时的目录关系？保持一致？
+ 
+    1.1 中间件主目录：F:\weblogic
+
+    1.2 产品安装目录 F:\weblogic\wlserver_10.3
+
+    1.3 创建域时，域所在目录 F：\weblogic\user_projects\domains 
+
+	用户名：weblogic ; 密码：12345678
+
+	配置管理服务器，Name xkqServer, port 7025
+
+    1.4 删除A域时，
+	·删除安装目录（ F：\weblogic\user_projects\domains\ ）下的A域目录，
+	·删除开始-->Oracle WebLogic --> UserProjects --> A域目录
+域Domain
+WebLogic Server中的域是逻辑上相关的一组 WebLogic Server 资源，可以作为一个单元进行管理。一个域中包含一台
+或多台 WebLogic Server，也可以包含 WebLogic Server 群集。域是由单个管理服务器管理的 WebLogic Server 实例的集合

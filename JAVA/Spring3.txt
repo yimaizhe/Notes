@@ -1,0 +1,138 @@
+Spring可以做很多事情，但归根结底支撑Spring的仅仅是少许的基本理念，所有理念都可以追溯到Spring最根本的使命上：简化Java开发。
+四种关键策略：
+1，基于POJO的轻量级和最小侵入性编程
+2，通过依赖注入和面向接口实现松耦合
+3，基于切面和惯例进行声明式编程
+4，通过切面和模板减少样板式代码
+
+一，Dependency Injection (DI，依赖注入) & Aspect-oriented Programming (AOP，面向切面编程)
+    1， 依赖注入让互相协作的软件组件保持松散耦合，而AOP编程允许你把遍布应用各处的功能分离出来形成可重用的组件；
+  
+    2，应用对象生存与Spring容器中。容器创建对象，装配它们、配置它们，管理它们的生存周期；容器使用依赖注入管理构成应用的组件，它会创建相互协作的组件之间的关联。分为Bean工厂和应用上下文两种；
+     应用上下文又分为几种类型：
+
+         ClassPathXMLApplicationContext——从类路径下的XML配置文件中加载上下文定义，把应用上下文定义文件当作类资源；PS： 在所有的类路径（包含JAR文件）下查找foo.xml文件
+    FileSystemXmlapplicationcontext——读取文件系统下的XML配置文件并加载上下文定义；PS：在指定的路径下查找foo.xml文件
+    XMLWebApplicationContext——读取Web应用下的XML配置文件并装载上下文定义。
+
+     3，Spring中Bean的生命周期
+
+     实例化——》填充属性——》调用BeanNameAware的setBeanName（）方法—— 》调用BeanFactoryAware的setBeanFactory()方法——》调用ApplicationContextAware的 setApplicationContext（）方法——》调用BeanPostProcessore的预初始化方法——》调用InitlaziingBean的afterPropertiesSet（）方法——》调用定制的初始化方法——》调用BeanPostProcessors的后初始化方法——
+——》bean可以被使用了-------
+容器关闭——》调用DisposableBean的destroy（）方法——》调用定制的销毁方法
+
+4，注解
+     注解减少了配置Spring所需要的XML基本信息。@Autowired实现基于注解驱动的依赖注入； @Qualifier实现细粒度的自动装配控制
+
+二，利用XML组织松耦合组件间的依赖和属性
+2.1，创建应用对象之间协作关系的行为通常被称为装配（wiring）——依赖注入的本质；
+2.2，Spring提供了两种配置Bean的方式，XML文件和注解
+xml文件的命名空间：
+     命名空间                                                                 用途
+     aop                                   为声明切面以及将@AspectJ注解的类代理为Spring切面提供了配置元素
+     beans                                支持声明Bean和装配Bean ——最核心，最原始
+     context                             为配置Spring应用上下文提供了配置元素，包括自动检测和自动装配Bean、注入非Spring直接管                                                 理的对象
+     jee                                     提供了与JavaEE API的集成，例如JNDI和EJB
+     jms                                    为声明消息驱动的POJO提供了配置元素
+     lang                                   支持配置由Groovy、JRuby或BeanShell等脚本实现的Bean
+     mvc                                   启动Spring MVC的能力，例如面向注解的控制器、视图控制器和拦截器
+     oxm                                   支持Spring的对象到XML映射配置
+     tx                                       提供声明式事务配置
+     util                                     提供各种各样的工具类元素，包括把集合配置为Bean、支持属性占位符元素
+
+2.3,如何为没有公开构造方法的变量配置一个Bean？
+     《bean》元素有一个factory-method属性，允许调用一个指定的静态方法，代替构造方法创建一个类的实例；
+2.4 Bean的作用域
+     所有的Spring Bean默认都是单例的，总是返回Bean的同一个实例；可以为Bean声明一个作用域，配置Bean的属性：
+                 scope=prototype
+即可每次请求时产生一个新的实例；eg：
+     <bean id="ticket" class="com.dc.Ticket" scope="prototype" />
+       作用域                                   定义
+singleton                        在每个Spring容器中，一个Bean定义只有一个对象实例（默认）
+prototype                      允许Bean的定义可以被实例化任意次（每次调用都创建一个实例）
+request                           在一次HTTP请求中，每个Bean定义对应一个实例；该作用域仅在基于Web的Spring上下文中有效
+session                          在一个HTTP session中，每个Bean定义对应一个实例；*********
+global-session               在一个全局HTTP session中，每个Bean定义对应一个实例；该作用域仅在Portlet上下文中才有效
+ 注： Spring的单例Bean只能保证在每个应用上下文中只有一个Bean的实例。
+2.5 初始化和销毁Bean
+     当上下文中定义的很多Bean都拥有相同的名字的初始化方法和销毁方法，没必要为每一个Bean声明init-method和destory-method属性
+     依赖注入的真正价值在于把相互协作的对象装配在一起，而不需要这些对象自己负责装配；
+2.6 装配集合——4种
+集合元素                    用途
+<list>                         装配list类型的值，允许重复
+<set>                         装配list类型的值，不允许重复
+<map>                      装配map类型的值，名称和值可以是任意类型
+<props>                    装配properties类型的值，名称和值都必须是String类型
+注：
+
+    <property>元素用于把值或Bean引用注入到Bean的属性中
+    <props>元素用于定义一个java.util.Properties类型的集合值
+    <prop>元素用于定义<props>集合的一个成员
+
+eg：
+         <bean id="a" class="c.d.a">
+              <property name="config">
+                   <props>
+                        <prop key="guita">start start</prop>
+                        <prop key="cymal">crash crash</prop>
+                   </props>
+              </property>
+         </bean>
+为元素装配null值 设置为<null/>
+
+2.7 使用表达式装配 SpEL
+     运行过程中配置值；#{}; 可混用
+     <property name="test" value="#{5}">
+     <property name="test" value="#{false}">
+     <property name="test" value="#{'chek String'}">
+     <property name="test" value='#{"chek String"}'>
+     <property name="test" value="#{1e4}">
+   三元运算符：
+         <property name="test" value="#{kenny.song != null ? kenny.song : 'Greensleeves' }" />
+   可简写为：
+         <property name="test" value="#{kenny.song != null ?: 'Greensleeves' }" />
+  操作集合   
+     matches 运算符支持表达式中的模式匹配；
+    .?[] 查询运算符  .^[]查询第一个匹配项 .$[] 查询最后一个匹配项
+    .![] 投影运算符
+三，面向注解的配置
+四，AOP
+五，对数据持久化的支持
+六，借助事务支持确保数据库的完整性
+七，Spring MVC框架》
+八，Spring Web Flow
+九，Spring Security
+十，远程服务
+十一，REST
+十二，JMS
+     同步通信的缺点：意味着等待；客户端与远程服务相耦合，若远程服务的接口、远程服务的位置、远程服务的可用性，任何一个不可用；服务监听指定的IP地址和端口；
+     异步通信。优点：间接性，不需要等待服务端
+     消息代理（message broker） ——类似于邮局，eg,ActiveMQ
+   和
+     目的地（destination）——类似于邮箱，只关注从哪里获得，不关心谁取走；有两种类型，1队列和2主题，与特定的消息模型相关联，
+     ①点对点模型，对应队列类型 。每个消息都有一个发送者和一个接收者；队列可以有多个接受者；消息被接受后就会从队列中删除，保证每条消息只能投递给一个接受者；多个接受者时，不确定投递给哪个；
+     ②主题的发布/订阅模型。 消息发布一个主题，所有主题的订阅者都会接收到此消息；
+实现：无需等待，面向消息和解耦（消息以数据为中心），位置独立，确保投递（服务无法使用时，消息存储）
+     xsi:schemaLocation :
+     提供了两个在实例文档中使用的特殊属性，用于指出模式文档的位置。这两个属性是：xsi:schemaLocation和xsi:noNamespaceSchemaLocation，前者用于声明了目标名称空间的模式文档，后者用于没有目标名称空间的模式文档，它们通常在实例文档中使用；xsi:schemaLocation属性的值由一个URI引用对组成，两个URI之间以空白符分隔。第一个URI是名称空间的名字，第二个URI给出模式文档的位置，模式处理器将从这个位置读取模式文档，该模式文档的目标名称空间必须与第一个URI相匹配。
+
+ ·检查型异常——必须要捕获；非检查型异常——不用捕获
+
+   Spring规避检查型异常的设计理念（？）
+ ·使用JmsTemplate接收消息的最大缺点在于receive()方法是同步的，一直被阻塞，直到有可用消息（或消息超时）
+   消息驱动POJO解决该问题
+   ——消息驱动Bean MDB
+ 
+ ·为POJO赋予消息接收能力的诀窍是在Spring中把它配置为消息监听器
+
+   消息监听容器：一个特殊的Bean，可以监控JMS目的地并等待消息的到达。
+
+十三，JMX
+
+待了解知识点：
+
+ActiveMQ：消息代理
+
+EJB规范：EJB是一个J2EE体系中的组件.再简单的说它是一个能够远程调用的javaBean.第一点,就是远程调用.第二点,就是事务的功能
+
+POJO：Plain Ordinary Java Object，简单的Java对象，实际就是普通JavaBeans，是为了避免和EJB混淆所创造的简称

@@ -1,0 +1,107 @@
+IDEA使用
+
+http://www.jetbrains.com/idea/documentation/index.jsp 这里是这个IDE的文档说明。下边我会附上Windows版的快捷键说明。
+
+ 
+
+txlong_onz
+
+IntelliJ IDEA Q&A for Eclipse Users/IntelliJ IDEA对于Eclipse开发者的一次问答疑惑：
+
+Q：我的Workspace发成什么事了？我的projects去哪里了？
+
+A：没什么大惊小怪的，因为这里的他们都是一个意思。
+
+IntelliJ的Project相当与Eclipse的Workspace，而Module相当于Project，呵呵是不是有点不习惯哦。
+
+下边就给出Eclipse与IntelliJ的概念的对应关系：
+Eclipse IDEA
+Workspace 	Project
+Project 	Module
+Project-specific JRE 	Module JDK
+User library 	Global library
+Classpath variable 	Path variable
+Project dependency 	Module dependency
+Library 	Module library
+
+ 
+
+Q：我怎么开发使用我的Eclipse工程呢？
+
+A：很简单，你有可以选择是导入或者是连接到IDE中。
+
+ 
+
+Q：我应该在哪里配置我的项目JDK？
+
+A：在项目的Settings对话框。
+
+添加JDK到项目，只用按Ctrl+Alt+Shift+S，在平台设置点击Settings JDKs并且指定JDK的path就好了。之后你就可以点击项目并且指定用哪个JDK了。
+
+ 
+
+Q：我如何添加文件到我的项目呢？
+
+A：只用拷贝到工作空间就行了。
+
+ 
+
+Q：我如何分享我的首选参数？
+
+A：通过project-level settings。
+
+点击Ctrl+Alt+S进入设置对话框，并且点击添加Live Templates。
+
+ 
+
+Q：我怎么知道我的所有文件都保存了？
+
+A：这个不用担心，他们都是自动保存的。
+
+在IntelliJ中，你不用担心没有保存文件，当你在切换应用，或这编译运行时，亦或VCS操作等等时。IDE都会给你自动保存的。不过你还可以荣国看Local History来看历史记录哦。
+
+ 
+
+Q：增量编纂发生了什么事?我如何编译我的项目？
+A：嗯，他有，但是属于尽量小的编译的。
+也就是说在编译器只在你需要运行或者做出响应的时候才回去编译文件。如果你希望每一次的编译都去编译的话可以下载第三方插件。这里是地址： http://plugins.intellij.net/plugin/?id=3822 (third-party development, not bundled)
+
+ 
+
+Q: What options are available for configuring code inspections?
+A: IDE and project-level profiles, plus per-file inspection settings.
+
+ 
+
+Q：我过去喜欢的快捷键哪里去了？
+A：呵呵，就在你身边哦。
+Intelli IDEA包含了Eclipse的快捷键设置。所以你可以设置你习惯了的Eclipse快捷键。但是如果你想学习IntelliJ的快捷键，你可以读或者把他打印出来。
+
+ 
+
+Q：我知道这个IDE真的不一样？
+A：是的，你说对了。
+在Eclipse，虚拟空间（在每一行后边可能用到的空间）已经被默认设置为没有了，而在IntelliJ中默认有。如果你不习惯这样可以去Settings dialog,Editor and clear the Allow placement of caret after end of line option.
+默认的Eclipse是高亮显示助记符，如果不习惯也可以在同一个地方设置 select Highlight usages of element at caret。
+
+ 
+
+Q：为什么有三种方法调用代码补全？
+A：嗯，这是因为他们是对不同的事情、情况的自动补全哦。
+在IntelliJ中你有三种类型的代码补全，他们的不同之处在于你可以选择使用最优的代码补全功能。
+例如，如果仅仅是希望快捷补全一个很明显的语句是可以用Ctrl+Space，这是调用的最基础的代码补全。并且这样也能看到代码补全列表并且选择。
+如果你需要更多精准的并且不想通过滚动条选择到补全列表的最下边的话，可以用Ctrl+Shift+Space进行筛选。他会很聪明的帮你过滤的。如果你有按下了一次的话，他会给你展示你的标记符能够用到的方法调用。
+最后，就是类名补全Ctrl+Alt+Space，让你更加快速的补全类名，并且添加import语句。
+
+ 
+
+Q：我如何配置我的VCS，让它集成到我的IDE上？我又如何添加项目到我的VCS呢？
+
+A：通过设置对话框，版本设置。
+你首先要选择类别，指定连接到服务器的名字和访问认证，然后映射工程到VCS就好了。向VCS中添加个工作空间，建立个简单的根目录到VCS就好了。
+
+ 
+
+Q：我如何从我VCS检出我的工作空间？
+A：其实从欢迎页面都可以的。
+从VCS检出源文件其实很简单，只用在版本控制点击检出就好了。

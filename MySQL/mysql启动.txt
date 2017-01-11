@@ -1,0 +1,33 @@
+启动mysql服务：
+
+service mysql start
+
+非root用户时需要加上sudo
+
+、启动方式
+1、使用 service 启动：
+[root@localhost /]# service mysqld start (5.0版本是mysqld)
+[root@szxdb etc]# service mysql start (5.5.7版本是mysql)
+
+2、使用 mysqld 脚本启动：
+/etc/inint.d/mysqld start
+
+3、使用 safe_mysqld 启动：
+safe_mysqld&
+
+b、停止
+1、使用 service 启动：
+service mysqld stop
+
+2、使用 mysqld 脚本启动：
+/etc/inint.d/mysqld stop
+
+3、mysqladmin shutdown
+
+c、重启
+1、使用 service 启动：
+service mysqld restart
+service mysql restart (5.5.7版本命令)
+
+2、使用 mysqld 脚本启动：
+/etc/init.d/mysqld restart

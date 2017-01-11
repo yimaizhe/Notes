@@ -1,0 +1,47 @@
+由于最近开始玩集群，所以不能总用之前的土办法来管理集群了，了解了一下pdsh这个小工具。在这里把过程和问题mark一下，以后如果入到新的问题，就统一在这篇blog里面更新了。
+
+1：安装
+首先去sourceforges上面下载了sourceforge的源码，我找到的版本是2.2.6，http://sourceforge.net/projects/pdsh/，解压后进入解压的目标目录，运行
+
+./configure --with-ssh --with-dshgroups --with-machines=/etc/dsh/machines
+
+这里是设置一下安装时候带的模块，包括了ssh和dshgroups、machines。ssh 是包括ssh这种连接方式(默认的是rsh，不过rsh需要启用rsh服务并进行设置，有时候比较麻烦)，dshgroups可以通过预先设置的hostname组来批量执行任务，不用每次都设置hostname列表了。machines是dshgroups的扩展，增加了-a这个参数，其实可以通过设置一个dshgroups来实现同样的功能，这个模块装不装区别不大
+
+等configure完成之后，运行make、make install来安装。安装完了以后，使用命令
+
+# pdsh -V
+pdsh-2.26
+rcmd modules: ssh,rsh,exec (default: rsh)
+misc modules: machines,dshgroup
+
+就可以看到pdsh的相关信息了。
+
+另外，pdsh是有编译好的rpm包的，比如hdp源里面就带一个2.2.7版本的，配置好源的话直接使用yum安装就省去了编译和配置的过程。如果遇到问题，可以参考一下pdsh的手册，里面写的还是比较详细的
+2、使用
+平时会用到的一些pdsh参数：
+
+-w host1,host2
+    指定一系列主机
+-g xxx    
+    在dshgroups里面，通过读取/etc/dsh/gorup/xxx或者~/.dsh/group/xxx这个文件里面的主机列表来指定一系列主机。注意，dshgroups里面的这个参数可能和genders里面的这个参数冲突
+-R name
+使用指定的rcmd模块代替默认的rcmd模块。也可以通过设置环境变量$PDSH_RCMD_TYPE来代替默认的rcmd模块。为了省事通常我都设置为ssh。操作系统安装的时候如果没有选rsh，那么需要安装服务并进行一些配置，会比较麻烦。
+-M name
+当misc模块冲突的时候(比如genders和dshgroups)，可以使用这个参数来指定生效的模块。
+
+比如我在/etc/dsh/group/cluster里面写了如下的内容：
+
+master01
+slave01
+slave02
+
+那么执行
+
+pdsh -g cluster ls -l
+
+就可以看到这3台机器的默认登录路径里面的文件列表了。
+
+3、遇到的问题
+(1)安装完pdsh之后执行命令遇到了connection refused，后来发现是执行pdsh的节点没有安装rsh以及相关服务导致的，有两个解决方法，一个是在所有节点上安装并启用rsh，另一个是把rcmd修改为ssh。我采用了后者。
+
+(2)pdsh -g xxx提示没有这个文件。这个问题是安装hdp里面的pdsh之后使用时遇到的。原因是这个pdsh把xxx当做一个绝对路径来处理了，和pdsh手册里面写的不一样，使用相对路径、设置了环境变量也没用。解决方法是每一次pdsh -g的时候后面跟服务器组文件的绝对路径，或者找个别的版本的pdsh =.=
