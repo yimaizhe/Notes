@@ -24,6 +24,18 @@
 
 8，查看git配置
 	git config -l
+
+9,创建新的分支
+	git branch newName
+
+	git branch 查看分支
+10，将新的分支推到远程仓库
+	git push origin newName
+
+11，切换分支
+	git checkout newName
+
+	——创建并切换分支：git checkout -b newName
  
 --------------------------------------
 问题：
