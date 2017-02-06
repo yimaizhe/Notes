@@ -1,0 +1,6 @@
+一、No embedded stylesheet instruction for file:奇怪的错误 
+
+分析了下发现main的提示入口竟然是xml文件，原来直接在xml里面点了运行，没有切换到源代码去~解决
+
+二、
+

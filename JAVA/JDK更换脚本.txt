@@ -1,0 +1,17 @@
+#!/bin/sh
+#usage: . this_file [args]
+
+JDK1.6_home = /home/yanglei/jdk1.6.0_21
+JDK1.8_home = /home/myCat/jdk1.8.0_73
+
+case $1 in
+	jdk1.6 )
+		export JAVA_HOME = $JDK1.6_home
+		;;
+	jdk1.7 )
+		export JAVA_HOME = $JDK1.8_home
+		;;
+esac
+
+export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH
+export CLASSPATH=$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib

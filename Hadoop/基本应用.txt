@@ -7,7 +7,7 @@
 	修改etc/hadoop/hadoop-env.sh 中的java_home;
 	执行:  bin/hadoop
 
-三种模式：
+single-node 下 三种模式：
 
 1，单机模式（local Mode）
 
@@ -31,8 +31,9 @@
 		jar cf name.jar className.class
  
     出错：
-	Exception in thread "main" org.apache.hadoop.mapreduce.lib.input.InvalidInputException: Input path does not exist:hdfs://localhost:9000/user/hadoop/input
-at org.apache.hadoop.mapreduce.lib.input.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:323)
+	Exception in thread "main" org.apache.hadoop.mapreduce.lib.input.InvalidInputException: 
+		Input path does not exist:hdfs://localhost:9000/user/hadoop/input at 
+		org.apache.hadoop.mapreduce.lib.input.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:323)
 
 	——配置伪分布式环境时，要对core-site.xml 文件进行修改，所以很可能是产生上述错误的原因：
 	关于hdfs://localhost:9000和配置文件 core-site.xml ：
@@ -45,11 +46,87 @@ at org.apache.hadoop.mapreduce.lib.input.FileInputFormat.singleThreadedListStatu
 		       <description>Abase for other temporary directories.</description> 
 		</property>    
 		<property>        
-			<name>fs.defaultFS</name>        
+			<name>dfs.defaultFS</name>      <!--注①--> 
 			<value>hdfs://localhost:9000</value>    
 		</property>
 	</configuration>
 
 2，伪分布模式（Pseudo-Distributed Mode)
+  
+  修改配置文件
+  etc/hadoop/core-site.xml:
 
-3,
+	<configuration>
+	    <property>
+		<name>fs.defaultFS</name>
+		<value>hdfs://localhost:9000</value>
+	    </property>
+	</configuration>
+
+  etc/hadoop/hdfs-site.xml:
+
+	<configuration>
+	    <property>
+		<name>dfs.replication</name>
+		<value>1</value>
+            </property>
+	</configuration>
+
+   使用命令:
+	ssh localhost
+   如果需要输入密码，则进行如下设置：
+	ssh-keygen -t dsa -P '' -f ~/.sh/id_dsa
+	cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
+
+   在本地运行MapReduce：
+
+	bin/hdfs namenode -format	格式化文件系统（注②）
+	
+	sbin/start-dfs.sh		启动NameNode和DataNode
+
+    在浏览器中访问NameNode，默认地址如下：
+	NameNode - http://localhost:50070/
+
+    创建执行MapReduce需要的HDFS目录
+	$ bin/hdfs dfs -mkdir /user
+	$ bin/hdfs dfs -mkdir /user/<username>   eg:xkq
+
+
+    将输入文件拷贝至input文件夹
+	$ bin/hdfs dfs -mkdir input
+	$ bin/hdfs dfs -put etc/hadoop/*.xml input
+
+    执行例子
+	$ bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.0.0-alpha1.jar grep input output 'dfs[a-z.]+'
+
+    将输出文件拷贝到本地，并查看
+	$ bin/hdfs dfs -get output output
+	$ cat output/*
+        或者直接查看
+	    $ bin/hdfs dfs -cat output/*
+  
+    停止进程
+
+	$sbin/stop-dfs.sh
+
+    ***************
+    注意：
+    ①，是dfs，不要写错
+    
+    ②，重复格式化会引起问题——
+	在第一次格式化dfs后，启动并使用了hadoop，后来又重新执行了格式化命令（hdfs namenode -format)，
+	这时namenode的clusterID会重新生成，而datanode的clusterID 保持不变；
+	namenode和datanode的clusterID不一致时，会导致datanode启动失败；
+
+	修改datanode里VERSION文件的clusterID 与namenode里的一致，再重新启动dfs（执行start-dfs.sh）
+	再执行jps命令可以看到datanode已正常启动
+
+    ③，bin/hdfs dfs 即代表了使用HDFS文件系统，该系统的命令格式与linux类似，只是每个命令前有‘-’；
+
+	如查看input文件夹：bin/hdfs dfs -ls input 
+
+3, 
+
+
+--------------
+http://www.cloudera.com/developers/get-started-with-hadoop-tutorial.html

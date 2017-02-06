@@ -1,0 +1,82 @@
+µۈ�͌ṩhttp½ӿڣ¬ȫϊϒ¸Ĕ��¡£¿ 
+}ɧ£ºhttp://www.baidu.com/query.jsp?param1=value2&param2=value2 
+֢¸�ڻ᷵»׸ml¸򊽵Ŋ䴶½ẻ£¬}ɧ£º 
+<?xml version="1.0" encoding="UTF-8" ?> 
+<result> 
+    <item id="0"> 
+         <id>20100318001</id> 
+         <name>օɽ</name> 
+         <sex>Ő</sex> 
+    </item> 
+</result> 
+
+ϒµŎˌ㋇£º 
+1.ɧºϔ٪ava³͐󗐵�⹶½ӿڣ¿²»ˇ՚jspאµ�» 
+2.ɧºν㏶·µ»صĽẻ¡£ 
+
+-----------------------------------------------------------------
+1¡¢¿ʒՍ¨¹�ķ½ʽ¶¡µ½˽¾ݣº 
+
+import java.net.*;
+import java.io.*;
+
+public class URLReader {
+    public static void main(String[] args) throws Exception {
+	URL yahoo = new URL("http://www.baidu.com/query.jsp?param1=value2&param2=value2");
+	BufferedReader in = new BufferedReader(
+				new InputStreamReader(
+				yahoo.openStream()));
+
+	String inputLine;
+
+	while ((inputLine = in.readLine()) != null)
+	    System.out.println(inputLine);
+
+	in.close();
+    }
+}
+
+2¡¢Ȼº�OM4JµĹ¤¾ߣ¬4½㏶¶¡µ½µ xml¸򊽵Ŋ�
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+rest½ӿڵĻ°¿ʒՊ¹ԃ
+
+RestTemplate
+
+1 2 3 4 5 6 7 8 9 10 11 12 13 14  String uri = "http://example.com/hotels/1/bookings"; 
+  
+PostMethod post = new PostMethod(uri); 
+String request = // create booking request content 
+post.setRequestEntity(new StringRequestEntity(request)); 
+  
+httpClient.executeMethod(post); 
+  
+if (HttpStatus.SC_CREATED == post.getStatusCode()) { 
+  Header location = post.getRequestHeader("Location"); 
+  if (location != null) { 
+    System.out.println("Created new booking at :" + location.getValue()); 
+  } 
+}  
+
+=========================================================
+public Page findByPage(int pageSize, int pageNo, long userId,
+			String serviceId,String serviceName,String status,String appName, String f) {
+		WebTarget res = this.getWebTarget().path("service").path("findByPage")
+		.queryParam("pageSize", String.valueOf( pageSize ) )
+		.queryParam("pageNo", String.valueOf( pageNo ) )
+		.queryParam("serviceId", serviceId )
+		.queryParam("serviceName", serviceName )
+		.queryParam("status", status )
+		.queryParam("appName", appName )
+		.queryParam("userId", String.valueOf( userId ) )
+		.queryParam("deployable", f);
+		String jsonStr = this.addAuthHeader(res.request(), new Date(), ConfigHelper.getValue("restUser")
+				, ConfigHelper.getValue("restPwd"), String.valueOf( pageSize ), 
+				String.valueOf( pageNo ), String.valueOf( userId ), 
+				serviceId,serviceName,status,appName, f  ).get(String.class);
+		if( LOG.isDebugEnabled() ){
+			LOG.debug("receive message：" + jsonStr);
+		}
+		return JSON.parseObject( jsonStr, Page.class );
+	}

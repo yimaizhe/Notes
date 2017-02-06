@@ -1,0 +1,32 @@
+1,安装插件
+	重启eclipse，打开Windows->preferences，选中左侧的 Hadoop Map/Reduce选项
+	在窗口右侧设置Hadoop安装路径（把Hadoop解压到指定目录下即可）。
+
+	注：如果没有该选项，则插件未安装成功；
+
+2，配置Map/Reduce Locations
+	打开Windows—Open Perspective—Other，选择Map/Reduce，点击OK，控制台会出现
+    Map/Reduce Locations窗口；点击+，或右键 弹出new Hadoop location,配置Hadoop：
+    输入Location Name（任意，eg:A）；
+    配置Map/Reduce Master和DFS master，host和port与core-site.xml保持一致；
+    User name填写Hadoop集群用户组名
+
+    点击左侧的DFSLocations—>A（上一步配置的location name)，如能看到user，表示安装成功.
+
+    注：Map/Reduce master默认端口50020，即DataNode，simple node模式时，不需要改变；
+        DFS为defalueFS的端口号9000，即NameNode；
+
+3,eclipse连接上DFS后，可以对远程的DFS文件（夹）进行操作。
+
+    上传文件夹时，报错an error occurred while performing dfs operation:null
+    
+    解决方法：
+	创建后刷新目录看是否显示新目录，如果没有，需要开放windows用户的权限,在hdfs-site.xml中加入以下相应的代码即可
+		<property>
+			<name>dfs.permissions</name>
+			<value>false</value>
+		</property>
+
+http://www.open-open.com/lib/view/open1418191526714.html
+http://www.cnblogs.com/dasheng-maritime/p/5401858.html
+连接虚拟机中的HDF

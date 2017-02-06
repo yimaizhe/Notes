@@ -1,0 +1,59 @@
+1.把怎么查找变换路径的常用命令搞清楚。
+	linux的命令是区分大小写的。
+	echo 看变量的值
+	su - username 切换用户，并且进入到用户的home的目录下
+	su username 切换用户，但当前目录并没有更改，并且没有读取这个用户的配置信息。
+	ls -a 看隐藏文件
+	ls -l 看目录和文件的权限信息，共十项分为三组(u-所有者，g-同组，o-其他组)(读、写、执行)，并且知道每个都代表的含义。
+		每个列出的项的含义
+	目录的权限的含义：读-ls能看到，写-能够创建子目录和文件，执行-cd能进入到目录里
+	root的权限：不受权限系统的限制。
+	chmod 更改权限	u-所有者，g-同组，o-其他组，a-全部
+		chmod u+x school.sql 更改所有者权限，增加上可执行权限
+		chmod u=x school.sql 更改所有者权限，使只具有可执行权限
+		chmod 755 school.sql 更改
+
+2.把常用目录的功能搞清楚
+  bin：可执行文件目录
+  dev：设备文件
+  var：可变的文件目录，例如ftp上传目录
+  home：每个用户的目录
+	一个例外：root用户不在home目录下，在/root/下
+  etc：配置文件目录
+  boot：linux的核心文件。
+
+3.常用文本编辑器：vi，vim
+	vi的模式：命令，插入编辑，Last line mode
+	常用命令：i,I,a,A,o,O,
+
+4.用户操作：useradd，passwd，删除用户
+
+5.配置网络：只要更改了配置文件，则必须从启服务。
+	setup 
+	service servicename restart 或 /etc/init.d/servicename start|stop|restart
+
+6.文件压缩解压缩
+	gzip   如果有多个文件，则每个文件被压缩成一个压缩文件
+	gunzip 
+	tar cvf in.tar 打包多个文件为一个文件
+	tar cfz in.tar.gz 即压缩又打包
+	tar xf in.tar 解包
+	tar zxf in.tar.gz 解包解压缩
+7.进程管理：
+
+8.shell	
+
+大题：
+mysql的操作
+
+apache的操作
+
+DNS，邮件服务器
+
+FTP
+
+php不考
+
+
+
+

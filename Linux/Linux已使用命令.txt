@@ -1,0 +1,854 @@
+1  ps -ef | grep ui
+    2  ps -ef | grep UI
+    3  ps -ef | grep ui
+    4  nohup sh startCloudUI.sh > ui.log &
+    5  tail -f ui.log 
+    6  nohup sh startLoadBalance.sh > lb.log &
+    7  tail -f lb.log 
+    8  cd /home/yanglei/
+    9  ll
+   10  cd mom/
+   11  ll
+   12  nohup ./StartMessageServer.sh > mom.log &
+   13  tail -f mom.log 
+   14  nohup ./StartMessageServer.sh > mom.log &
+   15  tail -f mom.log 
+   16  nohup ./StartMessageServer.sh > mom.log &
+   17  tail -f mom.log 
+   18  nohup ./StartMessageServer.sh > mom.log &
+   19  tail -f mom.log 
+   20  cd /home/yanglei/1225/bin
+   21  tail -f master.log 
+   22  cd /home/yanglei/
+   23  ll
+   24  cd 1225/
+   25  ll
+   26  cd bin/
+   27  ll
+   28  pkill java
+   29  ps -ef|grep java
+   30  nohup ./startMaster.sh > master.log &
+   31  nohup ./startSVN.sh > svn.log &
+   32  pwd
+   33  nohup ./startCloudUI.sh > ui.log &
+   34  nohup ./startAdapter.sh > adapter.log &
+   35  nohup ./startLoadBalance.sh > lb.log &
+   36  nohup ./startRouter.sh > router.log &
+   37  pkill java
+   38  nohup ./startMaster.sh > master.log &
+   39  nohup ./startSVN.sh > svn.log &
+   40  nohup ./startCloudUI.sh > ui.log &
+   41  nohup ./startAdapter.sh > adapter.log &
+   42  nohup ./startRouter.sh > router.log &
+   43  nohup ./startLoadBalance.sh > lb.log &
+   44  pkill java
+   45  nohup ./startMaster.sh > master.log &
+   46  nohup ./startCloudUI.sh > ui.log &
+   47  nohup ./startSVN.sh > svn.log &
+   48  nohup ./startAdapter.sh > adapter.log &
+   49  nohup ./startLoadBalance.sh > lb.log &
+   50  nohup ./startRouter.sh > router.log &
+   51  ps -ef|grep java
+   52  kill -9 16153
+   53  nohup ./startRouter.sh > router.log &
+   54  pkill java
+   55  nohup ./startMaster.sh > master.log &
+   56  nohup ./startCloudUI.sh > ui.log &
+   57  nohup ./startSVN.sh > svn.log &
+   58  nohup ./startAdapter.sh > adapter.log &
+   59  nohup ./startLoadBalance.sh > lb.log &
+   60  nohup ./startRouter.sh > router.log &
+   61  cd /home/yanglei/1225/bin
+   62  tail -f svn.log 
+   63  cd /home/yanglei/1225/bin
+   64  tail -f adapter.log 
+   65  tail -f adapter.log 
+   66  cd /home/yanglei/1225/bin
+   67  tail -f router.log 
+   68  cd /home/yanglei/1225/bin
+   69  tail -f lb.log 
+   70  cd /home/yanglei/1225/bin
+   71  tail -f ui.log 
+   72  cd /home/yanglei/1225/bin
+   73  tail -f lb.log 
+   74  cd /home/yanglei/20150108/bin
+   75  tail -f lb.log 
+   76  cd /home/yanglei/1225/bin
+   77  tail -f svn.log 
+   78  cd /home/yanglei/20150108/bin
+   79  tail -f svn.log 
+   80  cd /home/yanglei/
+   81  ll
+   82  rm -rf mom/
+   83  mkdir mom
+   84  ll
+   85  chmod 777 mom/
+   86  ll
+   87  ll
+   88  cd mom/
+   89  ll
+   90  ll
+   91  ps -ef|grep java
+   92  pkill java
+   93  ll
+   94  chmod 777 *
+   95  ll
+   96  ./StartMessageServer.sh
+   97  ps -ef|grep java
+   98  ./StartMessageServer.sh
+   99  cd ..
+  100  cd mom/
+  101  ll
+  102  cd config/
+  103  ll
+  104  vi messageserver.xml
+  105  more messageserver.xml
+  106  netstat -anp|grep 45112
+  107  cd ..
+  108  cd ..
+  109  ll
+  110  chmod 777 SmartPaaS.bin 
+  111  ll
+  112  ./SmartPaaS.bin 
+  113  ./SmartPaaS.bin 
+  114  mkdir 20150108
+  115  ll
+  116  chmod 20150108/
+  117  chmod 777 20150108/
+  118  ll
+  119  ./SmartPaaS.bin 
+  120  ./SmartPaaS.bin 
+  121  ll
+  122  chmod 777 SmartPaaS.bin 
+  123  ll
+  124  ./SmartPaaS.bin 
+  125  cd /home/yanglei/1225/bin
+  126  tail -f router.log 
+  127  cd /home/yanglei/20150108/bin
+  128  tail -f router.log 
+  129  cd /home/yanglei/1225/
+  130  cd bin/
+  131  pwd
+  132  nohup ./startMaster.sh > master.log &
+  133  nohup ./startSVN.sh > svn.log &
+  134  nohup ./startCloudUI.sh > ui.log &
+  135  nohup ./startAdapter.sh > adapter.log &
+  136  nohup ./startRouter.sh > router.log &
+  137  nohup ./startLoadBalance.sh > lb.log &
+  138  pkill java
+  139  nohup ./startMaster.sh > master.log &
+  140  nohup ./startSVN.sh > svn.log &
+  141  nohup ./startCloudUI.sh > ui.log &
+  142  nohup ./startAdapter.sh > adapter.log &
+  143  nohup ./startLoadBalance.sh > lb.log &
+  144  nohup ./startRouter.sh > router.log &
+  145  pkill java
+  146  nohup ./startMaster.sh > master.log &
+  147  ps -ef|grep java
+  148  ps -ef|grep java
+  149  nohup ./startSVN.sh > svn.log &
+  150  nohup ./startCloudUI.sh > ui.log &
+  151  nohup ./startAdapter.sh > adapter.log &
+  152  nohup ./startLoadBalance.sh > lb.log &
+  153  nohup ./startRouter.sh > router.log &
+  154  pkill java
+  155  nohup ./startMaster.sh > master.log &
+  156  nohup ./startSVN.sh > svn.log &
+  157  nohup ./startCloudUI.sh > ui.log &
+  158  nohup ./startAdapter.sh > adapter.log &
+  159  nohup ./startLoadBalance.sh > lb.log &
+  160  nohup ./startRouter.sh > router.log &
+  161  pkill java
+  162  nohup ./startMaster.sh > master.log &
+  163  nohup ./startSVN.sh > svn.log &
+  164  nohup ./startCloudUI.sh > ui.log &
+  165  nohup ./startAdapter.sh > adapter.log &
+  166  nohup ./startLoadBalance.sh > lb.log &
+  167  nohup ./startRouter.sh > router.log &
+  168  pkill java
+  169  ps -ef|grep java
+  170  ps -ef|grep java
+  171  pkill java
+  172  nohup ./startMaster.sh > master.log &
+  173  nohup ./startSVN.sh > svn.log &
+  174  nohup ./startCloudUI.sh > ui.log &
+  175  nohup ./startAdapter.sh > adapter.log &
+  176  nohup ./startLoadBalance.sh > lb.log &
+  177  nohup ./startRouter.sh > router.log &
+  178  pkill java
+  179  nohup ./startMaster.sh > master.log &
+  180  tail -f master.log 
+  181  tail -f master.log 
+  182  ps -ef|grep java
+  183  pkill java
+  184  nohup ./startMaster.sh > master.log &
+  185  ps -ef|grep java
+  186  tail -f master.log 
+  187  nohup ./startCloudUI.sh > ui.log &
+  188  ll
+  189  pkill java
+  190  nohup ./startMaster.sh > master.log &
+  191  nohup ./startCloudUI.sh > ui.log &
+  192  pkill java
+  193  ps -ef|grep java
+  194  nohup ./startMaster.sh > master.log &
+  195  nohup ./startCloudUI.sh > ui.log &
+  196  <invoker name="UpdateProbeAddressInvoker" implClass="com.dc.appengine.appmaster.message.client.UpdateProbeAddressInvoker" autoRun="false" />
+  197  <invoker name="InitProbeAddressInvoker" implClass="com.dc.appengine.appmaster.message.server.InitProbeAddressInvoker" autoRun="false" />
+  198  pkill java
+  199  nohup ./startMaster.sh > master.log &
+  200  nohup ./startCloudUI.sh > ui.log &
+  201  date
+  202  ps -ef|grep java
+  203  kill -9 23711
+  204  nohup ./startMaster.sh > master.log &
+  205  date
+  206  ps -ef|grep java
+  207  kill -9 23736
+  208  pkill java
+  209  nohup ./startMaster.sh > master.log &
+  210  nohup ./startCloudUI.sh > ui.log &
+  211  pkill java
+  212  nohup ./startMaster.sh > master.log &
+  213  nohup ./startCloudUI.sh > ui.log &
+  214  ps -ef|grep java
+  215  kill -9 26958
+  216  nohup ./startMaster.sh > master.log &
+  217  ps -ef|grep java
+  218  kill -9 27299
+  219  nohup ./startMaster.sh > master.log &
+  220  ps -ef|grep java
+  221  ps -ef|grep java
+  222  kill -9 27456
+  223  nohup ./startMaster.sh > master.log &
+  224  ps -ef|grep java
+  225  kill -9 27763
+  226  nohup ./startMaster.sh > master.log &
+  227  ps -ef|grep java
+  228  kill -9 28267
+  229  nohup ./startMaster.sh > master.log &
+  230  ps -ef|grep ajva
+  231  ps -ef|grep java
+  232  kill -9 28421
+  233  nohup ./startMaster.sh > master.log &
+  234  ps -ef|grep java
+  235  kill -9 28667
+  236  nohup ./startMaster.sh > master.log &
+  237  cd ..
+  238  cd ..
+  239  ll
+  240  rm -rf 1201/
+  241  ll
+  242  ll
+  243  chmod 777 SmartMOM.bin 
+  244  ll
+  245  ./SmartMOM.bin 
+  246  ll
+  247  cd 20150108/
+  248  ll
+  249  cd ..
+  250  chmod -R 777 20150108/
+  251  ll
+  252  cd 20150108/
+  253  ll
+  254  DBMirror.pl 
+  255  cd DB_scripts/
+  256  ll
+  257  vi all_mysql.sql 
+  258  vi dbauto_mysql.sh 
+  259  ll
+  260  ./dbauto_mysql.sh
+  261  vi dbauto_mysql.sh 
+  262  vi all_mysql.sql 
+  263  ./dbauto_mysql.sh
+  264  cd ..
+  265  cd bin/
+  266  ll
+  267  ./startMaster.sh
+  268  ./startMaster.sh
+  269  pwd
+  270  nohup ./startMaster.sh > master.log &
+  271  nohup ./startSVN.sh > svn.log &
+  272  nohup ./startCloudUI.sh > ui.log &
+  273  nohup ./startAdapter.sh > adapter.log &
+  274  nohup ./startRouter.sh > router.log &
+  275  nohup ./startLoadBalance.sh > lb.log &
+  276  nohup ./startRouter.sh > router.log &
+  277  pkill java
+  278  nohup ./startMaster.sh > master.log &
+  279  nohup ./startCloudUI.sh > ui.log &
+  280  nohup ./startSVN.sh > svn.log &
+  281  nohup ./startAdapter.sh > adapter.log &
+  282  nohup ./startLoadBalance.sh > lb.log &
+  283  nohup ./startRouter.sh > router.log &
+  284  ps -ef|grep java
+  285  kill -9 5610
+  286  nohup ./startMaster.sh > master.log &
+  287  cd ..
+  288  cd configs/
+  289  ll
+  290  cd router_conf/
+  291  ll
+  292  cd core_conf/
+  293  ll
+  294  cd conf/
+  295  ll
+  296  cd autobak
+  297  ll
+  298  vi mxsd_process.xml 
+  299  vi mxsd_process.xml 
+  300  vi mxsd_process.xml 
+  301  vi mxsd_process.xml 
+  302  vi mxsd_process.xml 
+  303  vi mxsd_process.xml 
+  304  ps -ef|grep java
+  305  kill -9 5606
+  306  cd ../../..
+  307  cd ../../bin/
+  308  ll
+  309  ll
+  310  nohup ./startCloudUI.sh > ui.log 
+  311  nohup ./startCloudUI.sh > ui.log &
+  312  pkill java
+  313  nohup ./startMaster.sh > master.log &
+  314  nohup ./startCloudUI.sh > ui.log &
+  315  nohup ./startSVN.sh > svn.log &
+  316  nohup ./startAdapter.sh > adapter.log &
+  317  nohup ./startLoadBalance.sh > lb.log &
+  318  nohup ./startRouter.sh > router.log &
+  319  ps -ef|grep java
+  320  kill -9 26090
+  321  nohup ./startMaster.sh > master.log &
+  322  pkill java
+  323  nohup ./startMaster.sh > master.log &
+  324  nohup ./startCloudUI.sh > ui.log &
+  325  nohup ./startSVN.sh > svn.log &
+  326  nohup ./startAdapter.sh > adapter.log &
+  327  nohup ./startLoadBalance.sh > lb.log &
+  328  nohup ./startRouter.sh > router.log &
+  329  cd /home/yanglei/1225/bin
+  330  tail -f adapter.log 
+  331  cd /home/yanglei/20150108/bin
+  332  tail -f adapter.log 
+  333  ps -ef|grep java
+  334  pkill java
+  335  cd /home/yanglei/
+  336  ll
+  337  cd mom/
+  338  ps -ef|grep java
+  339  mom ./StartMessageServer.sh > mom.log &
+  340  nohup ./StartMessageServer.sh > mom.log &
+  341  tail -f nohup.out 
+  342  tail -f mom.log 
+  343  tail -f mom.log 
+  344  nohup ./StartMessageServer.sh > mom.log &
+  345  tail -f mom.log 
+  346  nohup ./StartMessageServer.sh > mom.log &
+  347  tail -f mom.log 
+  348  nohup ./StartMessageServer.sh > mom.log &
+  349  tail -f mom.log 
+  350  tail -f mom.log 
+  351  nohup ./StartMessageServer.sh > mom.log &
+  352  tail -f mom.log 
+  353  nohup ./StartMessageServer.sh > mom.log &
+  354  nohup ./StartMessageServer.sh > mom.log &
+  355  tail -f mom.log 
+  356  nohup ./StartMessageServer.sh > mom.log &
+  357  tail -f mom.log 
+  358  ll
+  359  cd ..
+  360  ll
+  361  cd mom/
+  362  ll
+  363  ./StartMessageServer.sh 
+  364  ./StartMessageServer.sh 
+  365  ll
+  366  ps -ef|grep java
+  367  nohup ./StartMessageServer.sh > mom.log &
+  368  tail -f mom.log 
+  369  nohup ./StartMessageServer.sh > mom.log &
+  370  tail -f mom.log 
+  371  nohup ./StartMessageServer.sh > mom.log &
+  372  tail -f mom.log 
+  373  cd /home/yanglei/1225/bin
+  374  tail -f master.log 
+  375  tail -f master.log 
+  376  cd /home/yanglei/20150108/bin
+  377  tail -f master.log 
+  378  cd /home/yanglei/1225/bin
+  379  tail -f ui.log 
+  380  cd /home/yanglei/20150108/bin
+  381  tail -f ui.log 
+  382  cd /home/yanglei/20150108/bi
+  383  cd /home/yanglei/20150108/bib
+  384  cd /home/yanglei/20150108/bin
+  385  tail -f lb.log 
+  386  cd /home/yanglei/20150108/bin
+  387  tail -f router.log 
+  388  cd /home/yanglei/
+  389  ll
+  390  cd mom/
+  391  ll
+  392  cd ../
+  393  ll
+  394  cd 20150108/
+  395  ll
+  396  cd bin/
+  397  ll
+  398  cd ..
+  399  cd ..
+  400  ll
+  401  cd mom/
+  402  ll
+  403  tail -f mom.log 
+  404  ll
+  405  ps -ef|grep jva
+  406  ps -ef|grep java
+  407  ./StartMessageServer.sh 
+  408  ./StartMessageServer.sh 
+  409  ./StartMessageServer.sh 
+  410  ./StartMessageServer.sh 
+  411  ./StartMessageServer.sh 
+  412  ./StartMessageServer.sh 
+  413  ./StartMessageServer.sh 
+  414  ./StartMessageServer.sh 
+  415  ./StartMessageServer.sh 
+  416  ./StartMessageServer.sh 
+  417  ./StartMessageServer.sh 
+  418  ./StartMessageServer.sh 
+  419  ./StartMessageServer.sh 
+  420  ./StartMessageServer.sh 
+  421  ./StartMessageServer.sh 
+  422  ]
+  423  ]
+  424  ./StartMessageServer.sh 
+  425  ./StartMessageServer.sh 
+  426  ./StartMessageServer.sh 
+  427  ./StartMessageServer.sh 
+  428  ./StartMessageServer.sh 
+  429  ./StartMessageServer.sh 
+  430  ./StartMessageServer.sh 
+  431  ./StartMessageServer.sh 
+  432  ./StartMessageServer.sh 
+  433  cd /home/yanglei/
+  434  ll
+  435  cd 20150108/
+  436  ll
+  437  cd bin/
+  438  pwd
+  439  tail -f master.sh
+  440  tail -f master.log 
+  441  ]
+  442  tail -f master.log 
+  443  tail -f master.log 
+  444  tail -f master.log 
+  445  tail -f master.log 
+  446  tail -f master.log 
+  447  tail -f master.log 
+  448  cd /home/yanglei/20150108/bin
+  449  tail -f svn.log 
+  450  cd /home/yanglei/20150108/bin
+  451  tail -f adapter.log 
+  452  cd /home/yanglei/20150108/bin
+  453  tail -f ui.log 
+  454  cd /home/yanglei/
+  455  ll
+  456  cd mom/
+  457  ll
+  458  vi StartMessageServer.sh 
+  459  pkill hava
+  460  pkill java
+  461  pkill java
+  462  pkill java
+  463  cd ..
+  464  cd 20150108/
+  465  ll
+  466  cd configs/
+  467  ll
+  468  cd master_conf/
+  469  ll
+  470  vi log4j.properties 
+  471  vi log4j.properties 
+  472  pkill java
+  473  pkill java
+  474  ps -ef|grep java
+  475  cd /home/yanglei/20150108/
+  476  ll
+  477  cd bin/
+  478  ll
+  479  nohup ./startMaster.sh > master.log &
+  480  nohup ./startSVN.sh > svn.log & 
+  481  nohup ./startCloudUI.sh > ui.log &
+  482  nohup ./startAdapter.sh > adapter.log 
+  483  nohup ./startAdapter.sh > adapter.log &
+  484  nohup ./startRouter.sh > router.log &
+  485  nohup ./startLoadBalance.sh > lb.log &
+  486  pkill java
+  487  nohup ./startMaster.sh > master.log &
+  488  nohup ./startSVN.sh > svn.log &
+  489  nohup ./startCloudUI.sh > ui.log &
+  490  nohup ./startAdapter.sh > adapter.log &
+  491  nohup ./startLoadBalance.sh > lb.log &
+  492  nohup ./startRouter.sh > router.log &
+  493  ps -ef|grep jabva
+  494  ps -ef|grep java
+  495  kill - 9 21949
+  496  kill -9 21949
+  497  nohup ./startRouter.sh > router.log &
+  498  pkill java
+  499  nohup ./startMaster.sh > master.log &
+  500  nohup ./startSVN.sh > svn.log &
+  501  nohup ./startCloudUI.sh > ui.log &
+  502  nohup ./startAdapter.sh > adapter.log &
+  503  nohup ./startLoadBalance.sh > lb.log &
+  504  nohup ./startRouter.sh > router.log &
+  505  pkill java
+  506  nohup ./startMaster.sh > master.log &
+  507  nohup ./startSVN.sh > svn.log &
+  508  nohup ./startCloudUI.sh > ui.log &
+  509  nohup ./startAdapter.sh > adapter.log &
+  510  nohup ./startLoadBalance.sh > lb.log &
+  511  nohup ./startRouter.sh > router.log &
+  512  pkill java
+  513  nohup ./startMaster.sh > master.log &
+  514  nohup ./startSVN.sh > svn.log &
+  515  nohup ./startCloudUI.sh > ui.log &
+  516  nohup ./startAdapter.sh > adapter.log &
+  517  nohup ./startLoadBalance.sh > lb.log &
+  518  nohup ./startRouter.sh > router.log &
+  519  pkill java
+  520  nohup ./startMaster.sh > master.log &
+  521  nohup ./startSVN.sh > svn.log &
+  522  nohup ./startCloudUI.sh > ui.log &
+  523  nohup ./startAdapter.sh > adapter.log &
+  524  nohup ./startLoadBalance.sh > lb.log &
+  525  nohup ./startRouter.sh > router.log &
+  526  pkill java
+  527  nohup ./startMaster.sh > master.log &
+  528  nohup ./startSVN.sh > svn.log &
+  529  nohup ./startCloudUI.sh > ui.log &
+  530  nohup ./startAdapter.sh > adapter.log &
+  531  nohup ./startLoadBalance.sh > lb.log &
+  532  nohup ./startRouter.sh > router.log &
+  533  ps -ef|grep java
+  534  kill -9 5198
+  535  nohup ./startMaster.sh > master.log &
+  536  pkill java
+  537  nohup ./startMaster.sh > master.log &
+  538  nohup ./startSVN.sh > svn.log &
+  539  nohup ./startCloudUI.sh > ui.log &
+  540  nohup ./startAdapter.sh > adapter.log &
+  541  nohup ./startLoadBalance.sh > lb.log &
+  542  nohup ./startRouter.sh > router.log &
+  543  pkill java
+  544  ]
+  545  nohup ./startMaster.sh > master.log &
+  546  nohup ./startSVN.sh > svn.log &
+  547  nohup ./startCloudUI.sh > ui.log &
+  548  nohup ./startAdapter.sh > adapter.log &
+  549  nohup ./startLoadBalance.sh > lb.log &
+  550  nohup ./startRouter.sh > router.log &
+  551  nohup ./startRouter.sh > router.log &
+  552  pkill java
+  553  nohup ./startMaster.sh > master.log &
+  554  nohup ./startSVN.sh > svn.log &
+  555  nohup ./startCloudUI.sh > ui.log &
+  556  nohup ./startAdapter.sh > adapter.log &
+  557  nohup ./startLoadBalance.sh > lb.log &
+  558  nohup ./startRouter.sh > router.log &
+  559  nohup ./startRouter.sh > router.log &
+  560  pkill java
+  561  nohup ./startMaster.sh > master.log &
+  562  nohup ./startSVN.sh > svn.log &
+  563  nohup ./startCloudUI.sh > ui.log &
+  564  nohup ./startAdapter.sh > adapter.log &
+  565  nohup ./startLoadBalance.sh > lb.log &
+  566  nohup ./startRouter.sh > router.log &
+  567  pkill java
+  568  nohup ./startMaster.sh > master.log &
+  569  nohup ./startSVN.sh > svn.log &
+  570  nohup ./startCloudUI.sh > ui.log &
+  571  nohup ./startAdapter.sh > adapter.log &
+  572  nohup ./startLoadBalance.sh > lb.log &
+  573  nohup ./startRouter.sh > router.log &
+  574  ps -ef|grep java
+  575  kill -9 18401
+  576  nohup ./startMaster.sh > master.log &
+  577  ps -ef|grep java
+  578  kill -9 19633
+  579  nohup ./startMaster.sh > master.log &
+  580  ps -eg|grep java
+  581  ps -ef|grep java
+  582  kill -9 25218
+  583  nohup ./startMaster.sh > master.log &
+  584  ps -ef|grep java
+  585  kill -9 25512
+  586  nohup ./startMaster.sh > master.log &
+  587  ps -ef|grep java
+  588  kill -9 25713
+  589  nohup ./startMaster.sh > master.log &
+  590  ps -ef|grep java
+  591  kill -9 26040
+  592  nohup ./startMaster.sh > master.log &
+  593  ps -ef|grep java
+  594  kill -9 26217
+  595  nohup ./startMaster.sh > master.log &
+  596  ps -ef|grep java
+  597  kill -9 26387
+  598  nohup ./startMaster.sh > master.log &
+  599  pkill java
+  600  nohup ./startMaster.sh > master.log &
+  601  nohup ./startSVN.sh > svn.log &
+  602  nohup ./startCloudUI.sh > ui.log &
+  603  nohup ./startAdapter.sh > adapter.log &
+  604  nohup ./startLoadBalance.sh > lb.log &
+  605  nohup ./startRouter.sh > router.log &
+  606  ps -ef|grep java
+  607  kill -9 10145
+  608  nohup ./startMaster.sh > master.log
+  609  nohup ./startMaster.sh > master.log &
+  610  pkill java
+  611  ]
+  612  nohup ./startMaster.sh > master.log &
+  613  nohup ./startSVN.sh > svn.log &
+  614  nohup ./startCloudUI.sh > ui.log &
+  615  nohup ./startAdapter.sh > adapter.log &
+  616  nohup ./startLoadBalance.sh > lb.log &
+  617  nohup ./startRouter.sh > router.log &
+  618  pkill java
+  619  nohup ./startMaster.sh > master.log &
+  620  nohup ./startSVN.sh > svn.log &
+  621  nohup ./startCloudUI.sh > ui.log &
+  622  nohup ./startAdapter.sh > adapter.log &
+  623  nohup ./startLoadBalance.sh > lb.log &
+  624  nohup ./startRouter.sh > router.log &
+  625  ps -ef|grep java
+  626  kill -9 23030
+  627  nohup ./startLoadBalance.sh > lb.log &
+  628  pkill java
+  629  nohup ./startMaster.sh > master.log &
+  630  nohup ./startSVN.sh > svn.log &
+  631  nohup ./startCloudUI.sh > ui.log &
+  632  nohup ./startAdapter.sh > adapter.log &
+  633  nohup ./startLoadBalance.sh > lb.log &
+  634  nohup ./startRouter.sh > router.log &
+  635  nohup ./startRouter.sh > router.log &
+  636  pkill java
+  637  nohup ./startMaster.sh > master.log &
+  638  nohup ./startSVN.sh > svn.log &
+  639  nohup ./startCloudUI.sh > ui.log &
+  640  nohup ./startAdapter.sh > adapter.log &
+  641  nohup ./startLoadBalance.sh > lb.log &
+  642  nohup ./startRouter.sh > router.log &
+  643  ps -ef|grep java
+  644  kill -9 26894
+  645  nohup ./startLoadBalance.sh > lb.log &
+  646  ps -ef|grep java
+  647  kill -9 26951
+  648  nohup ./startRouter.sh > router.log &
+  649  pkill java
+  650  nohup ./startMaster.sh > master.log &
+  651  nohup ./startSVN.sh > svn.log &
+  652  nohup ./startCloudUI.sh > ui.log &
+  653  nohup ./startAdapter.sh > adapter.log &
+  654  nohup ./startLoadBalance.sh > lb.log &
+  655  nohup ./startRouter.sh > router.log &
+  656  pkill java
+  657  nohup ./startMaster.sh > master.log &
+  658  nohup ./startSVN.sh > svn.log &
+  659  nohup ./startCloudUI.sh > ui.log &
+  660  nohup ./startAdapter.sh > adapter.log &
+  661  nohup ./startLoadBalance.sh > lb.log &
+  662  nohup ./startRouter.sh > router.log &
+  663  nohup ./startMaster.sh > master.log &
+  664  nohup ./startSVN.sh > svn.log &
+  665  nohup ./startCloudUI.sh > ui.log &
+  666  nohup ./startAdapter.sh > adapter.log &
+  667  nohup ./startLoadBalance.sh > lb.log &
+  668  nohup ./startRouter.sh > router.log &
+  669  pkill java
+  670  ]
+  671  nohup ./startMaster.sh > master.log &
+  672  nohup ./startSVN.sh > svn.log &
+  673  nohup ./startCloudUI.sh > ui.log &
+  674  nohup ./startAdapter.sh > adapter.log &
+  675  nohup ./startLoadBalance.sh > lb.log &
+  676  nohup ./startRouter.sh > router.log &
+  677  ps -ef|grep java
+  678  kill -9 4783
+  679  nohup ./startMaster.sh > master.log &
+  680  nohup ./startMaster.sh > master.log &
+  681  nohup ./startSVN.sh > svn.log &
+  682  nohup ./startCloudUI.sh > ui.log &
+  683  nohup ./startAdapter.sh > adapter.log &
+  684  nohup ./startLoadBalance.sh > lb.log &
+  685  nohup ./startRouter.sh > router.log &
+  686  ps -ef|grep java
+  687  nohup ./startMaster.sh > master.log &
+  688  nohup ./startSVN.sh > svn.log &
+  689  nohup ./startCloudUI.sh > ui.log &
+  690  nohup ./startAdapter.sh > adapter.log &
+  691  nohup ./startLoadBalance.sh > lb.log &
+  692  nohup ./startRouter.sh > router.log &
+  693  ps -ef|grep java
+  694  kill -9 8605
+  695  nohup ./startMaster.sh > master.log &
+  696  ps -ef|grep java
+  697  kill -9 12014
+  698  nohup ./startMaster.sh > master.log &
+  699  ps -ef|grep ajva
+  700  ps -ef|grep java
+  701  kill -9 12442
+  702  nohup ./startMaster.sh > master.log &
+  703  ps -ef|grep java
+  704  kill -9 8728
+  705  nohup ./startRouter.sh > router.log &
+  706  ps -ef|grep java
+  707  kill -9 12678
+  708  nohup ./startMaster.sh > master.log &
+  709  nohup ./startMaster.sh > master.log &
+  710  kill -9 12879
+  711  nohup ./startRouter.sh > router.log &
+  712  ps -ef|grep java
+  713  kill -9 13584
+  714  nohup ./startMaster.sh > master.log &
+  715  kill -9 13734
+  716  nohup ./startRouter.sh > router.log &
+  717  nohup ./startMaster.sh > master.log &
+  718  nohup ./startSVN.sh > svn.log &
+  719  nohup ./startCloudUI.sh > ui.log &
+  720  nohup ./startAdapter.sh > adapter.log &
+  721  nohup ./startLoadBalance.sh > lb.log &
+  722  nohup ./startRouter.sh > router.log &
+  723  ps -ef|grep java
+  724  kill -9 16178
+  725  nohup ./startRouter.sh > router.log &
+  726  cd /home/yanglei/20150108/bin
+  727  tail -f lb.log 
+  728  cd /home/yanglei/0115/bin
+  729  tail -f lb.log 
+  730  cd /home/yanglei/20150108/bin
+  731  tail -f svn.log 
+  732  cd /home/yanglei/0115/bin
+  733  tail -f svn.log 
+  734  ps -ef|grep java
+  735  cd /home/yanglei/20150108/
+  736  ll
+  737  cd bin/
+  738  ll
+  739  pwd
+  740  tail -f master.log
+  741  tail -f master.log
+  742  tail -f master.log
+  743  cd /home/yanglei/0115/bin
+  744  tail -f master.log 
+  745  cd /home/yanglei/
+  746  ll
+  747  cd mom/
+  748  ll
+  749  tail -f mom.log 
+  750  ps -ef|grep java
+  751  kill -9 15726
+  752  ./StartMessageServer.sh 
+  753  ./StartMessageServer.sh 
+  754  ./StartMessageServer.sh 
+  755  ./StartMessageServer.sh 
+  756  ./StartMessageServer.sh 
+  757  cd ..
+  758  cd mom/
+  759  ll
+  760  ./StartMessageServer.sh 
+  761  ll
+  762  ./StartMessageServer.sh 
+  763  cd /home/yanglei/20150108/bin
+  764  tail -f ui.log 
+  765  cd /home/yanglei/0115/bin
+  766  tail -f ui.log 
+  767  cd /home/yanglei/20150108/bin
+  768  tail -f router.log 
+  769  cd /home/yanglei/0115/bin
+  770  tail -f router.log 
+  771  cd /home/yanglei/20150108/bin
+  772  tail -f adapter.log 
+  773  cd /home/yanglei/0115/bin
+  774  tail -f adapter.log 
+  775  pkill java
+  776  cd /home/yanglei/
+  777  ll
+  778  cd 20150108/
+  779  ll
+  780  cd bin/
+  781  ll
+  782  ps -ef|grep java
+  783  nohup ./startMaster.sh > master.log &
+  784  nohup ./startSVN.sh > svn.log &
+  785  nohup ./startAdapter.sh > adapter.log &
+  786  nohup ./startCloudUI.sh > ui.log &
+  787  nohup ./startRouter.sh > router.log &
+  788  nohup ./startLoadBalance.sh > lb.log &
+  789  ps -ef|grep java
+  790  kill -9 28868
+  791  nohup ./startRouter.sh > router.log &
+  792  pkill java
+  793  nohup ./startMaster.sh > master.log &
+  794  nohup ./startSVN.sh > svn.log &
+  795  nohup ./startAdapter.sh > adapter.log &
+  796  nohup ./startCloudUI.sh > ui.log &
+  797  nohup ./startLoadBalance.sh > lb.log &
+  798  nohup ./startRouter.sh > router.log &
+  799  pkill java
+  800  nohup ./startMaster.sh > master.log &
+  801  nohup ./startSVN.sh > svn.log &
+  802  nohup ./startAdapter.sh > adapter.log &
+  803  nohup ./startCloudUI.sh > ui.log &
+  804  nohup ./startLoadBalance.sh > lb.log &
+  805  nohup ./startRouter.sh > router.log &
+  806  pkill java
+  807  nohup ./startMaster.sh > master.log &
+  808  nohup ./startSVN.sh > svn.log &
+  809  nohup ./startAdapter.sh > adapter.log &
+  810  nohup ./startCloudUI.sh > ui.log &
+  811  nohup ./startLoadBalance.sh > lb.log &
+  812  nohup ./startRouter.sh > router.log &
+  813  ps -ef|grep java
+  814  kill -9 6520
+  815  nohup ./startRouter.sh > router.log &
+  816  ps -ef|grep java
+  817  kill -9 7499
+  818  nohup ./startRouter.sh > router.log &
+  819  pkill java
+  820  cd ..
+  821  cd ..
+  822  cd ..
+  823  ll
+  824  cd yanglei/
+  825  ll
+  826  cd 0115/
+  827  ll
+  828  cd bin/
+  829  ll
+  830  pwd
+  831  nohup ./startMaster.sh > master.log &
+  832  nohup ./startSVN.sh > svn.log &
+  833  nohup ./startAdapter.sh > adapter.log &
+  834  nohup ./startCloudUI.sh > ui.log &
+  835  nohup ./startLoadBalance.sh > lb.log &
+  836  nohup ./startRouter.sh > router.log &
+  837  nohup ./startRouter.sh > router.log &
+  838  cd /home/yanglei/
+  839  ll
+  840  mkdir 0115
+  841  chmod 0115/
+  842  chmod 777 0115/
+  843  ll
+  844  cd 0115/
+  845  ll
+  846  cd ..
+  847  ll
+  848  chmod 777 Smart*
+  849  ll
+  850  rm -rf mom/
+  851  ./SmartMOM.bin 
+  852  ./SmartPaaS.bin 
+  853  ps -ef|grep java
+  854  cd /home/yanglei/

@@ -1,0 +1,57 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++
+[root@ESB-Test19 bin]# 
+[root@ESB-Test19 bin]# ./start-paas.sh out
+ 
+Starting MOMOUT, logging to out.log
+ 
+[root@ESB-Test19 bin]# 
+********************************************
++++++++++++++++++++++++++++++++++++++++++++
+[root@ESB-Test19 bin]# ./start-paas.sh logcollector
+Starting LogCollector, logging to logcollector.log
+ 
+[root@ESB-Test19 bin]# 
+******************************************
+++++++++++++++++++++++++++++++++++++++++++
+[root@ESB-Test19 bin]# tail -f logcollector.log 
+BASE_HOME is /home/xukq/paasnode
+import env
+Set PAAS Environment
+.
+java version "1.6.0_21"
+Java(TM) SE Runtime Environment (build 1.6.0_21-b06)
+Java HotSpot(TM) 64-Bit Server VM (build 17.0-b16, mixed mode)
+.
+Listening for transport dt_socket at address: 5067
+App-Engine LogCollector has been started.
+*********************************************************
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ [root@ESB-Test19 bin]# ./start-paas.sh node
+Starting Node, logging to node.log
+[root@ESB-Test19 bin]# tail -f node.log
+2015-04-21 16:31:20,546 [DEBUG]  (PortScanner.java.merge:58) - Clear the works list.
+2015-04-21 16:31:20,546 [DEBUG]  (PortScanner.java.merge:60) - Shutdown the pool.
+2015-04-21 16:31:20,651 [INFO ]  (PortScanner.java.process:88) - Port scan ended.
+2015-04-21 16:31:22,748 [DEBUG]  (Main.java.run:117) - ********************* Management:true
+2015-04-21 16:31:22,750 [DEBUG]  (Main.java.run:118) - ********************* false:read config.properties get prop from native
+2015-04-21 16:31:22,751 [DEBUG]  (Main.java.run:119) - ********************* true:read prop from master
+===================================================
+App-Engine NodeAgent has been started successfully.
+===================================================
+2015-04-21 16:31:22,909 [INFO ]  (Main.java.run:170) - App-Engine NodeAgent has been started successfully.
+
+*******************************************************
+批量启动 后台
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[root@ESB-Test26 bin]# ./start-paas.sh adapter svn master cloudui router loadbalance journal
+Starting Master, logging to master.log
+Starting Adapter, logging to adapter.log
+ 
+Starting SVN, logging to svn.log
+Starting CloudUI, logging to cloudui.log
+ 
+ 
+Starting Router, logging to router.log
+Starting LoadBalance, logging to loadbalance.log
+Starting Journal, logging to journal.log
+[root@ESB-Test26 bin]# 

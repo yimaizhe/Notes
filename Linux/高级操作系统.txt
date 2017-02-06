@@ -1,0 +1,127 @@
+服务器资源：ftp://202.112.88.35/pub/softwares/
+下面有linux和虚拟机的安装程序
+
+cd命令：
+ls	-a -l
+cd 	空是用户当前home .. /
+su      su root   不修改当前目录
+        su - root 修改到当前用户目录
+pwd 
+clear
+mkdir
+echo	显示某变量值 (用户定义变量显示时需前加$)
+	$> a=6
+	$> echo $a
+cp	拷贝 -r(递归拷整个目录文件)
+bash sh 两个不同shell的切换
+id	察看用户基本信息	
+man	帮助察看命令
+info	帮助察看命令
+<tab><tab>察看全部命令
+uname	察看系统信息
+mv	给文件或目录改名或移动
+rm	删除文件和目录
+who	显示当前谁在线
+cat	显示文本文件内容
+vi	文本编辑器(讲义ch8有介绍)
+	esc：切换命令和输入模式
+	a,i,o:分别按不同方式进入输入模式
+	:w,:q,:wq,:q!,:e(编辑其他文件)
+	命令模式下：
+		上下左右移动：h,j,k,l
+		移动到行首行尾：0,$xx
+		删除一行：dd
+		删除5行：5dd
+		删除一个或多个字符：x,数字+x
+		撤销：u
+		按单词往后移动光标：w0
+		移动光标到下一行行首：W
+		移动光标到最后一行或某一行：G，数字+G
+		移动光标到第一行：gg
+		/ 要搜索的字符串 N/n:在匹配的字符串间上下跳转
+		8yy 复制从光标行开始的8行；
+		p 将复制的内容粘贴到当前行。
+网络配置相关：
+	ifconfig  看ip地址
+	setup	  修改ip地址
+	service network restart 重启网络服务
+
+df  显示文件系统磁盘信息
+ssh 连接到其他linux操作系统
+exit 退出远程系统
+useradd 添加用户
+userdel 删除用户
+passwd  设置某个用户口令 -l -u 给用户加解锁使之不能/恢复登录
+chmod   改变权限 
+chown   修改某个文件的属主 chown 用户名 文件名；chown .组名 文件名
+halt -p 关机
+ln    做文件映射的硬链接连接文件
+ln -s 做文件映射的软链接连接文件
+mount 查看当前系统挂接的文件系统或设备。
+umask 是通过八进制的数值来定义用户创建文件或目录的默认权限
+
+压缩和解压缩
+gzip gunzip
+tar        将文件或目录打包成一个文件
+
+rpm -qa	    查看红帽安装的包
+grep	    可通过管道过滤满足要求的条件
+>	     覆盖重定向
+>>	     追加重定向::
+
+echo $PATH  查看搜索路径，等同window系统的path系统变量
+PATH=.:$PATH 将当前目录追加入PATH变量的路径里。
+永久修改当前用户目录下的.bash_profile，即可永久修改path的路径信息。
+source .bash_profile  让这个配置文件直接生效
+/etc/profile  这个目录下的配置文件对所有用户都有效。
+
+进程控制与管理
+killall 文件名：杀死全部此文件名的进程。
+
+fdisk	磁盘分区
+mkfs	格式化磁盘
+df	查看文件系统磁盘信息
+
+rpm -qa |grep httpd 查看redlinux的包管理器
+service httpd status 查看apche的webservice的状态
+service httpd start/restart 
+service vsftpd restart 重启ftp服务器
+
+chcon -Rt httpd_sys_content_t /var/www2/ 修改权限
+
+==========apache=========
+chmod 711 ~
+chmod 755 public_html/
+chcon -Rt httpd_sys_content_t public_html/
+chmod u+x userdir  将userdir文件设置为可执行文件。
+------------
+#!/bin/bash
+useradd $1
+passwd $1
+mkdir /home/$1/public_html
+chown $1.$1 /home/$1/public_htm#l
+chmod 711 /home/$1
+chmod 755 /home/$1/public_html
+chcon -Rt httpd_sys_content_t /home/$1/public_html
+------数据库------
+service mysqld restart
+mysql的登陆：mysql -uroot -p 
+mysql>help 可查看mysql的帮助和常用操作命令。
+show databases;
+show tables;
+desc student; 看表的结构
+use tableName; 使用某个数据库
+select database();  查询当前被操作的数据库名
+select * from tableName \G 让表数据垂直显示
+insert into student values(null,'zhang',sha('123'),'F');
+mysql的配置文件：/etc/my.cnf
+将文件数据装入数据库的表中：
+	load data local infile 'stu.txt' into table student(name,password,gender);
+
+
+
+
+
+
+
+		

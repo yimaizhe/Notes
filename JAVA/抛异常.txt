@@ -1,0 +1,3 @@
+使用try catch抛出异常时，方法需要调用异常函数
+
+public MySqlPacket resolvePacket(TcpPacket tcp) throws Exception{
