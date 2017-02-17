@@ -1,0 +1,9 @@
+
+1，在xml文件中的sql语句，包含include标签
+	<select id="genPch" resultType="string">
+  		<include refid="rwgl.dao.key.key_rw_pch" />
+	</select>
+   <sql>用于封装SQL语句，<include>用来调用 refid指明命名空间rwgl.dao.key中的id=key_rw_pch
+
+http://www.cnblogs.com/mafly/p/5839863.html
+

@@ -159,3 +159,28 @@ SQL>select * from dba_sys_privs where grantee='GAME';
 10，查询表属于哪一个用户
 	
    select owner from dba_tables where table_name='TNAME'; 
+
+11，SQL函数：
+   
+  · decode（）：
+   主要作用：将查询结果翻译成其他值（即以其他形式表现出来，以下举例说明）；
+   使用方法：
+	Select decode（columnname，值1,翻译值1,值2,翻译值2,...值n,翻译值n,缺省值）
+	from talbename where …
+   其中columnname为要选择的table中所定义的column，
+   含义解释：
+	decode(条件,值1,翻译值1,值2,翻译值2,...值n,翻译值n,缺省值)的理解如下：
+		if （条件==值1） then　return(翻译值1)
+		elsif （条件==值2）then　return(翻译值2)　　　　
+		......
+		elsif（条件==值n）then return(翻译值n)
+		else　return(缺省值)
+		end if
+	注：其中缺省值可以是你要选择的column name 本身，也可以是你想定义的其他值，比如Other等；
+  
+  ·NVL(EXPR1,EXPR2)
+
+	若EXPR1是NULL,则返回EXPR2,否则返回EXPR1. 
+
+  ·sign(number)
+	函数根据某个值number是0、正数还是负数，分别返回0、1、-1

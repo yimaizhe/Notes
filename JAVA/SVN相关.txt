@@ -1,0 +1,21 @@
+1，本地安装的TortoiseSVN属于svn客户端；
+   
+   eclipse中安装的subclipse属于插件，相互独立；
+
+2，eclipse安装subclipse插件时,选项Subversion JavaHL Native Library Adapter需要选上，
+
+   否则安装完成后，Windows-> Preference -> Team -> SVN页面，svn接口 client没有选项，
+
+   导致关联工程时，报uable to load default SVN client错误；
+
+3，关联项目
+	eclipse中已有项目A，与SVN服务器上项目B关联时，选择Team->Share Project,
+	在填写svn路径时，是放到该路径文件夹中，
+	如：
+		http://10.126.3.194:8080/svn/GIRDC/12FY17税收大数据平台/代码库/trunk/RWGL/
+	即A在RWGL下面。如果RWGL下面已有A，则合并
+
+
+
+
+

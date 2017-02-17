@@ -5,6 +5,10 @@ Spring可以做很多事情，但归根结底支撑Spring的仅仅是少许的基本理念，所有理念都可以
 3，基于切面和惯例进行声明式编程
 4，通过切面和模板减少样板式代码
 
+对于开发者来说，开发者使用Spring框架主要是做两件事：①开发Bean；②配置Bean。对于Spring框架来说，它要做的就是根据配置文件来创建Bean实例，并调用Bean实例的方法完成"依赖注入"——这就是所谓IoC的本质。
+控制反转（Inverse of Control，IoC）与依赖注入相同
+
+
 一，Dependency Injection (DI，依赖注入) & Aspect-oriented Programming (AOP，面向切面编程)
     1， 依赖注入让互相协作的软件组件保持松散耦合，而AOP编程允许你把遍布应用各处的功能分离出来形成可重用的组件；
   
