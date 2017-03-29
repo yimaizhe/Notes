@@ -1,4 +1,18 @@
-错误：rejected –non-fast-forward
+一、No embedded stylesheet instruction for file:奇怪的错误 
+
+分析了下发现main的提示入口竟然是xml文件，原来直接在xml里面点了运行，没有切换到源代码去~解决
+
+二、
+
+eclipse启动tomcat一直处在starting状态 ——已经启动成功，但状态是starting，超过45s 报超时
+
+原因：设置了eclipse的代理，但是这个代理可用性不是很好，或者说是有问题的，然而eclipse启动判断tomcat是否启动
+   其实是通过网络去访问tomcat的虚拟机的，然后会通过代理去访问，这个时候就一直在连接，造成了好像一直都在启动tomcat的状态，
+   解决就是取消使用eclipse代理，具体原因有待细究。
+
+三、
+
+  错误：rejected –non-fast-forward
 错误原因
 
 文件冲突，本地的代码和远程Repository中的文件个数不一致（即远程Repository中存在本地项目中不存在的文件）或本地得项目不是在远程Repository代码的基础上修改的。
@@ -11,3 +25,6 @@ Eclipse和工程都更换位置后，连不上git:
 重新生成ssh key,先使用git客户端试试能不能拉代码
 
 eclipse引入git代码后，在Java视图没有工程：git视图->右键->import project from git respository->import as general project
+
+
+

@@ -1,1 +1,14 @@
-，Spring不是一种 全有全无 的解决方案。 如果，现有的应用使用了WebWork、Struts、Tapestry或其他的UI框架作为前端程序，完全可以只与Spring的事务特性进行集成。 只需要使用 ApplicationContext 来挂接你的业务逻辑和通过 WebApplicationContext 来集成你的web层前端程序
+Spring不是一种 全有全无 的解决方案。 如果，现有的应用使用了WebWork、Struts、Tapestry或其他的UI框架作为前端程序，
+完全可以只与Spring的事务特性进行集成。 只需要使用 ApplicationContext 来挂接你的业务逻辑和通过 WebApplicationContext 
+来集成你的web层前端程序。
+
+注解：
+
+在Service类上使用了@Service注解修饰，在它的私有字段PersonDao上面有@Autowired注解修饰。
+	@Service告诉spring容器，这是一个Service类，默认情况会自动加载它到spring容器里。
+	@Autowired注解告诉spring，这个字段是需要自动注入的。
+
+eg: 加载Dao时需要注解，如果不写@Resource，则程序不识别该dao,teamDao=null
+	@Resource
+	private ZdyxzwhDao teamDao ; 
+

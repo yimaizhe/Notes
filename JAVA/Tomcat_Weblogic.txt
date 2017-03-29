@@ -1,0 +1,33 @@
+一,远程调试
+
+ · Tomcat远程调试
+    <方法一>
+    1，bin/catalina.bat的开头添加：
+
+	set JPDA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:9000
+ 
+	其中suspend=y时，启动等待连接进行调试；localhost代表只在本地，远程时去掉；9000是端口号；
+    2，修改 startup.bat 的最后 call语句：
+
+	call "%EXECUTABLE%" jpda start %CMD_LINE_ARGS%
+	添加jpda，不需要调试时，可去掉。
+
+    <方法二>
+    1,添加环境变量
+	C:\ >set JPDA_ADDRESS=9000
+	C:\ >set JPDA_TRANSPORT=dt_socket
+    2,启动dpda
+	TOMCAT_HOME\BIN\> catalina jpda start
+
+ · Weblogic远程调试
+      在bin/setDomainEnv.cmd中添加：
+	
+	set JAVA_DEBUG=-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=%DEBUG_PORT%,server=y,suspend=n -Djava.compiler=NONE
+	set JAVA_OPTIONS=%JAVA_OPTIONS% %enableHotswapFlag% -ea -da:com.bea... -da:javelin... -da:weblogic...
+	-ea:com.bea.wli... -ea:com.bea.broker... -ea:com.bea.sbconsole...
+
+
+
+
+
+

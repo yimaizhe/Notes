@@ -5,5 +5,92 @@
 	</select>
    <sql>用于封装SQL语句，<include>用来调用 refid指明命名空间rwgl.dao.key中的id=key_rw_pch
 
+2,mybaits和Spring整合时，在配置文件applicationContext.xml中配置 数据库会话
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:${jdbc.configLocation}"/>
+	</bean>
+   ·数据源：dataSource，显示数据库连接的用户名、密码等具体信息；
+	eg:
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">  
+		<property name="driver">  
+			<value>${jdbc.driverClassName}</value>  
+	        </property>  
+		<property name="driverUrl">  
+			<value>${jdbc.url}</value>  
+	        </property>  
+		<property name="user" value="${jdbc.username}"/>  
+	        <property name="password" value="${jdbc.password}"/>  
+		<property name="alias" value="Pool_dbname"/>  
+	        <property name="maximumActiveTime" value="600000"/>  
+		<property name="prototypeCount" value="0"/>  
+	        <property name="maximumConnectionCount" value="50"/>  
+	        <property name="minimumConnectionCount" value="2"/>  
+	        <property name="simultaneousBuildThrottle" value="50"/>  
+		<property name="houseKeepingTestSql" value="select CURRENT_DATE"/>  
+	 </bean>
+	 PS：数据库连接池可以有不同的实现，如
+		class="org.logicalcobwebs.proxool.ProxoolDataSource"、
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">、
+		class="org.apache.commons.dbcp.BasicDataSource"。。。
+	就是应用程序和数据库之间维护了一个连接池，这样进行数据库操作的时候就从池里取连接，用完归还，连接并不释放，
+	因为建立连接销毁连接比较消耗时间，池化技术在追求性能的时候很常用，
+	如apache commons pool2，数据库连接池的实现有很多，apache有，还有个c3p0，还有阿里巴巴也有，大同小异
+
+  ·配置configLocation代表MyBatis的别名信息,如：
+	 <mappers>
+		<mapper resource="db/mapping/oracle/machineMgr.xml" />
+		<mapper resource="db/mapping/oracle/typeVm.xml" />
+	 </mappers>
+	PS：也可直接指定xml：
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+		<property name="dataSource" ref="dataSource" />  
+		<!-- 自动扫描mapping.xml文件 -->  
+		<property name="mapperLocations" value="classpath:com/cn/hnust/mapping/*.xml"></property>  
+	</bean>  
+
+   一般来说，配置文件有：jdbc.properties ——数据库连接信息）；
+		        mybatis.config ——MyBatis的别名信息，一般命名为 sql-map-oracle-config.xml；
+		        mapper(*dao.xml)——“SQL语句”和“DAO”之间的映射关系；
+			
+		配置可以写在一个文件中，
+
+
+3,写sql语句时的错误
+    eg:
+	<select id="getMaxGroupId" parameterType="java.lang.String" resultType="java.lang.String" >
+		select max(group_dm) MAX_GROUP_DM from DM_GROUP where 1=1
+		<if test="preStr!=null">
+			and group_dm like '%#{preStr}%'
+		</if>
+	</select>
+	其中
+	① test测试一个参数是否存在时，如果传入的参数和test中写的参数不一致，会报错：
+		There is no getter for property named '' in ''...
+	解决方法：可将test中的具体参数名更改为test="_parameter!=null"
+	② 直接执行sql语句时，可以用like '%?%',但在mybatis中，需要改成 
+		and group_dm like #{preStr}
+
+
+------------------
+3，单元测试
+
+    测试一个类，service或dao时，可以使用@Resource注入，不过之前需要load applicationContext.xml，
+这样那些bean都被创建好了，就可以注入到测试类里：
+	@RunWith(SpringJUnit4ClassRunner.class)		//表示继承了SpringJUnit4ClassRunner类
+	@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
+	——写在测试类前面
+	@Resource
+	TestDao dao;
+   这种需要一个spring-test的jar；
+
+   你也可以不使用注解这种方式，简单的就是手动load那个applicationContext.xml，然后获取bean，然后就想测哪个方法就测试哪个：
+	ApplicationContext con= new ClassPathXmlApplicationContext("../applicationContext.xml");
+	private TaskService ts = (TaskService) con.getBean("taskService");
+
+   手动load，就能拿到一个bean上下文，获取哪个bean就使用名字拿,拿到这个bean就能调用它所有的方法,
+
+
+
 http://www.cnblogs.com/mafly/p/5839863.html
 

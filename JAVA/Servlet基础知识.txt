@@ -1,0 +1,74 @@
+Servlet过滤器web.xml的配置
+
+    Servlet过滤器，它是一种特殊的Servlet,可以用来对请求进行过滤。多个过滤器可以形成过滤链（FilterChain）。
+  当请求发送到servlet之前，可以用过滤器截获和处理请求;servlet结束工作之后，在响应发回给客户之前，可以用过滤器处理响应;
+  当一个Java类实现了javax.servlet.Filter接口，成为了过滤器，可以访问ServletContext;
+
+    <?xml version="1.0" encoding="UTF-8"?>  
+    <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee   
+        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">  
+        <display-name></display-name>  
+        <welcome-file-list>  
+            <welcome-file>index.jsp</welcome-file>  
+        </welcome-file-list>  
+      
+        <filter><!-- 声明过滤器实现类和 初始化参数 -->  
+            <filter-name>Filter1</filter-name><!-- 过滤器名 -->  
+            <filter-class>com.myFilter.Filter1</filter-class><!--过滤器类，包括包名 -->  
+            <!—下面这个init-param是设置初始化参数，本次测试没有用到，可以不写 -->  
+            <init-param>  
+                <param-name>a</param-name><!-- 初始化参数名 -->  
+                <param-value>5</param-value><!-- 初始化参数值 -->  
+                </init-param>  
+        </filter>  
+      
+        <filter>  
+            <filter-name>Filter2</filter-name>  
+            <filter-class>com.myFilter.Filter2</filter-class>  
+        </filter>  
+      
+        <filter>  
+            <filter-name>Filter3</filter-name>  
+            <filter-class>com.myFilter.Filter3</filter-class>  
+        </filter>  
+      
+    <filter-mapping><!-- 将过滤器映射到servlet或者URL中，即把过滤器和web资源关联起来 -->  
+            <filter-name>Filter1</filter-name><!-- 上面声明过的过滤器名 -->  
+            <servlet-name> /*</servlet-name><!-- 指定过滤器映射的URL，/*是指全部URL -->  
+        </filter-mapping>  
+        <filter-mapping>  
+            <filter-name> Filter2</filter-name>  
+            <url-pattern>/*</url-pattern>  
+    </filter-mapping>  
+    <filter-mapping>  
+            <filter-name>Filter3</filter-name>  
+            <servlet-name>ServletTest</servlet-name><!-- 指定过滤器映射的servlet -->  
+        </filter-mapping>  
+      
+        <servlet>  
+            <servlet-name>ServletTest</servlet-name>  
+            <servlet-class>com.myServlet.ServletTest</servlet-class>  
+        </servlet>  
+      
+        <servlet-mapping>  
+            <servlet-name>ServletTest</servlet-name>  
+            <url-pattern>/servlet/ServletTest</url-pattern>  
+        </servlet-mapping>  
+      
+    </web-app>  
+   PS：根据servlet2.3规范filter执行是按照web.xml配置的filter-mapping先后顺序进行执行
+
+也就是说因为我们上面配置的web.xml文件中，过滤器的关联顺序是filter1、filter2、filter3，所以输出的结果是1、2、3、3、2、1
+
+那么，要想改变顺序的话，我们直接把<filter-mapping>的顺序调一下就可以解决问题了。
+
+但是，事情往往不会那么顺利的，当我们把filter3的<filter-mapping>调到第一的时候，控制台输出的结果却不是第一个输出filter3的信息，
+
+而且无论你怎么改，都是没作用，这是因为过滤器在关联servlet或URL的时候，是遵循这样的规则的：先找到与URL模式匹配的所有过滤器，
+
+最后再找与servlet-name匹配的过滤器。就是说，因为filter1、filter2关联的是URL，而filter3关联的是servlet，所以无论<filter-mapping>
+
+的位置怎么改都好，容器都会先找到URL关联的filter，最后再去找servlet关联的filter
+
