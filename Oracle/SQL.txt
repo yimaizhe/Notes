@@ -8,7 +8,7 @@
     其中 NEW_TABLE_NAME是表A在T中的新名字（同义词）， Z_USER_NAME是表所在的数据库用户名，
     TABLE_NAME 是表名，T_USER_NAEM是T数据库的用户名
 
-	eg: create or replace synonym DI_HY for J1_DI_ZJ.DI_HY@ZJSJCK_168;
+	eg: create or replace synonym DI_HY for J1_DI_ZJ.DI_HY@ ZJSJCK_168;
 
 注：
  1）同义词，即别名，与视图功能类似，是一种映射关系。
@@ -16,6 +16,8 @@
 
     创建同义词：
      create or replace [public] synonym syn_name for ob_name [@dblink]
+
+    跨数据库时使用@ ； 在当前用户下创建的同义词对当前用户生效
 
     Oracle同义词分为：
 	公用同义词——DBA创建，或拥有 create public synonym系统权限；
@@ -184,3 +186,33 @@ SQL>select * from dba_sys_privs where grantee='GAME';
 
   ·sign(number)
 	函数根据某个值number是0、正数还是负数，分别返回0、1、-1
+
+----------------------
+--创建表：
+	create table WH_GROUP_MEMBER 
+	(
+	   GROUP_DM             CHAR(11)             not null,
+	   FZR_DM               CHAR(11)             not null,
+	   FZRLX                CHAR(1)              not null,
+	   constraint PK_WH_GROUP_MEMBER primary key (GROUP_DM, FZR_DM, FZRLX)
+	);
+--给表字段添加注释
+	comment on table WH_GROUP_MEMBER is
+	'小组成员信息';
+
+	comment on column WH_GROUP_MEMBER.GROUP_DM is
+	'小组代码';
+
+	comment on column WH_GROUP_MEMBER.FZR_DM is
+	'负责人代码';
+
+	comment on column WH_GROUP_MEMBER.FZRLX is
+	'负责人类型（S-税务机关，G-小组，P-人员）';
+
+
+
+
+
+
+
+
