@@ -1,0 +1,36 @@
+一，主页面A调用iframe页面B，如何调用B的方法
+	
+	var funcImpl=parent.window.frames[0].frameElement.contentWindow;//获取iframe的对象
+	funcImpl.initparams=param;//为子页面传参数，initparams是iframe页面的全局变量；param是实际参数
+	funcImpl.eval(funcName);//调用子页面方法funcName
+  　
+	如果需要获得funcName方法的返回值，须：
+	var rs = funcImpl.eval(funcName).call();
+	不调用call（）的话，返回的是该函数，函数未执行
+
+  在加载完框架后再加载数据：
+	var param = JSON.parse(JSON.stringify(funcInfo["data"]));
+	setTimeout(function(){
+		//等子页面的文档初始化完成后执行数据初始化
+		$localFuncInvoke(iframeId,funcInfo["init_funcName"],param);
+	},500);	
+
+   ＰＳ：
+　　1：document.getElementById("ii").contentWindow 得到iframe对象后，就可以通过contentWindow得到iframe包含页面
+	的window对象，然后就可以正常访问页面元素了；
+
+　　2：$("#ii")[0].contentWindow  如果用jquery选择器获得iframe，需要加一个【0】；
+
+　　3：$("#ii")[0].contentWindow.$("#dd").val() 可以在得到iframe的window对象后接着使用jquery选择器进行页面操作;
+
+　　4：$("#ii")[0].contentWindow.hellobaby="dsafdsafsdafsdafsdafsdafsadfsadfsdafsadfdsaffdsaaaaaaaaaaaaa"; 
+	可以通过这种方式向iframe页面传递参数，在iframe页面window.hellobaby就可以获取到值，hellobaby是自定义的变量；
+
+　　5：在iframe页面通过parent可以获得主页面的window，接着就可以正常访问父亲页面的元素了；
+
+　　6：parent.$("#ii")[0].contentWindow.ff; 同级iframe页面之间调用，需要先得到父亲的window，然后调用同级的
+	iframe得到window进行操作；
+
+
+
+

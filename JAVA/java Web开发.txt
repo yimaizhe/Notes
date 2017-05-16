@@ -1,3 +1,66 @@
+·Bean:
+	在一个稍大的项目中，如果组件采用xml的bean定义来配置，显然会增加配置文件的体积，查找以及维护起来也不太方便。 
+
+     Spring2.5为我们引入了组件自动扫描机制，他在类路径下寻找标注了上述注解的类，并把这些类纳入进spring容器中管理。
+
+     它的作用和在xml文件中使用bean节点配置组件时一样的。要使用自动扫描机制，用的纯注解，不需要写入文件；
+
+·servlet是什么东西
+	servlet就是服务端小程序，就是它可以处理请求。它是从CGI演化而来，CGI就是最早的动态网页技术
+
+    再往前说，以前的页面都是静态页面，什么是静态页面，就是写死的html，没有动态效果，后来人们用CGI实现动态效果，
+    
+    比如张三登录看到的是他的东西，李四登录看到的是李四的东西，这就是动态的；以前张三一个网页，写死的，李四一个网页，
+    
+    也是写死的，那么有一万个人，就有一万个相似的网页。后来java横空出世，发明了servlet，可以生成动态的html，
+ 
+    不过人们发现用servlet动态输出html标签实在太low，就发明了jsp，jsp也是servlet，只不过经过一个翻译过程。
+
+    C:\Users\yangzhec\Desktop\apache-tomcat-7.0.70\work\Catalina\localhost\_\org\apache\jsp；
+    你找到你的tomcat的安装包，在work\Catalina下有从jsp翻译出来的servlet：
+
+	java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy");
+	request.setAttribute("year", sdf.format(new java.util.Date()));
+	request.setAttribute("tomcatUrl", "http://tomcat.apache.org/");
+	request.setAttribute("tomcatDocUrl", "/docs/");
+	request.setAttribute("tomcatExamplesUrl", "/examples/");
+
+       out.write("\r\n");
+       out.write("<!DOCTYPE html>\r\n");
+       out.write("<html lang=\"en\">\r\n");
+       out.write("    <head>\r\n");
+       out.write("        <meta charset=\"UTF-8\" />\r\n");
+       out.write("        <title>");
+       out.print(request.getServletContext().getServerInfo() );
+       out.write("</title>\r\n");
+       ....
+
+       jsp翻译出的servlet，就是往out（也就是输出流）里写很多标签，servlet的原理也是这样, 但是servlet一般只处理数据，
+       
+       不管页面渲染，jsp中有el表达式和jstl标签专门用来做显示，有for标签，if标签等等，serlvlet负责查数据库，处理业务，
+       
+       jsp负责显示，生成html文本，注意，这个html是动态生成的，大家各司其职.
+
+       tomcat一般叫servlet container，也就是servlet容器，tomcat里面就运行着很多servlet.
+      
+       servlet是处理请求的，它只负责接收请求参数，按道理说所有的操作都可以在servlet中完成，但是为了清晰，所以分层.
+
+       分层一般有service层 dao层, service层一般写业务逻辑，dao层负责数据库操作,至于selvlet，只负责接收参数，调用service的逻辑，
+       
+       然后处理响应.  rest接口属于servlet,不过所有rest可能只使用一个servlet,包括springmvc，也是一个servlet处理所有请求,
+       
+       相当于它内部又实现了一个转发机制.
+
+       注解@Repository  @Service  @Controller   @Component  @Component("qxglDao")  @Service("qxglService")  @Path("rs/qxgl")
+
+       spring定义了一套，然后javaee也定义了一套，比如component和service功能类似，看一下@service的源码，它包含了@component。
+       
+       还有一个注解@Resource，是javax.annotation包下面的，而@Service是org.springframework.stereotype包下面的。
+
+       也就是说ajax可以直接访问到service层？NO。ajax访问的是servlet，servlet调用service。
+
+
+============================
 Java web整合开发
 
 一，
@@ -27,11 +90,38 @@ Java web整合开发
 	还可以执行其他任务，如网络地址转换；可以是单独的机器；
 	一般工作于传输层和网际层；
 
+二、web.xml
+
+  · tomcat中一个web项目就是WEB-INF还有一些html，js之类的文件，WEB-INF放的是classes和lib和web.xml，classes就是src编译出来的，
+那些esayui jsp image就放在WEB-INF外就行，只要符合这个结构就能正常访问; 发布到tomcat里以后,项目下应该有一个web.xml才行
+
+jsp放在WEB-INF下面直接访问是不行的;放在webContent下面可以直接访问
+
+放在WEB-INF下面是需要有请求，然后请求再转发到jsp;而放在webcontent下，你直接请求这个jsp，就是这个jsp生成的servlet来处理请求
+
+request.getRequestDispatcher("/WEB-INF/test.jsp").forward(request,response);
 
 
+    在struts2中，views是MVC中的V；jsp可放在了web-inf下，放在webcontent下也行。你请求，经过controller处理之后，
+你在request中或者session中放一些model，然后return一个字符串是吧，然后struts根据这个字符串然后找到views下面的一个
+jsp，然后这个jsp还会处理这个请求，这时候那些标签就起作用了：标签从request中或者session中取你放的那些model，
+然后生成html片段，然后通过response的writer写给浏览器，通过网络写给浏览器，一堆字符而已。浏览器拿到这些字符，
+就能渲染一个页面出来，至于那个jsp放在webcontent下面，就会被用户直接访问，
+可是用户的请求里没有那些model，所以访问也没什么意义。根据实际情况来决定jsp放在哪里。
 
+ ·web项目中包含src,webcontent，如何更改webcontent文件夹名称：
 
+1，新建项目时的设置:
 
+    在新建对话框下一步, 进行到 Web Module 时将 Content Directory 的名字改为你想要的名字就可以了 
+	
+2, 已有项目的设置 ,加载一个已有 web 项目 , 项目到 eclipse 中时 
+
+    ①、增加 web Facets, 对着项目根节点，右键 , 选择 Properties, 在弹出的对话框中，选择 Project Facets ，在右边的选择框中，勾选 Java 和 Dynamic Web Module ，并在 Dynamic Web Module  后数字中，选择 jsp 的版本，默认为 3.0.
+
+    ②、还是在 这个界面，选中，这时，选择列表下面会出现“ Further Configuration availabe ” 的链接 ——没找到，
+    点击这个链接，设置src 和 out path, 下一步，就是 Web Module 的设置了，第一项所说，更改 Content Directory 名字为你的 webRoot 
+    目录名字即可。 
 
 
 

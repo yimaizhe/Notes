@@ -1,0 +1,21 @@
+1,Spring_contex.xml文件
+  Referenced file contains errors (http://www.springframework.org/schema/context/spring-context-4.0.xsd). 
+  For more information, right click on the message  in the Problems View and select "Show Details..."
+
+Details:
+  The errors below were detected when validating the file "spring-context-4.0.xsd" via the file "spring-context.xml". 
+  In most cases these errors can be detected by validating "spring-context-4.0.xsd" directly.  However it is possible 
+  that errors will only ...
+
+  <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd ">
+   解决方法：
+	去掉倒数第二行的spring-context-4.0.xsd中的版本号，即写成spring-context.xsd
+

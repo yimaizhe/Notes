@@ -1,0 +1,71 @@
+主要在改bug.....
+=======业务=======
+任务管理处理任务生存周期相关操作：
+	任务的创建（主要是风险发送任务）、
+	分配（手工分配、规则分配， 新建任务自动执行规则分配——自定义规则，默认规则）、
+	回收（未完成、未作废的任务）、
+	退回（按机构退回，按规则退回，只有非根、未完成、未作废的任务能退回）、
+	作废（即删除， 责任机构是创建机构才允许作废;且任务状态为已创建、已收回、已退回）、
+	阅知（即完成）、
+	查询；
+	权限的管理（角色权限：起草人权限，分配权限，执行人权限，管理权限；数据权限）
+		存在未配置数据权限的角色，若保存，则以人员的“权限税务机构”作为角色的默认数据权限（支持向下扩展）
+		11507810150  11507818888
+	自定义小组的管理（增删改查）
+   存在的问题：
+	任务数统计，显示全省数据时，如果数据量过大，加载很慢，未优化
+
+易忘的表：
+	v_dj_nsrxx——纳税人信息
+	rw_dbsy——待办事宜
+	wh_zdgz——维护自动规则
+	gz_gzxx——规则信息，GZ_CS——规则参数
+	wh_ry_qxjs——权限信息
+
+
+=======技术=======
+JAVA:
+   1,worker构建器工厂
+      worker.discription.priprity.painter.callback 了解了运行方式；
+  
+   2，@Controller
+      @RequestMapping(value="***") ——Spring MVC
+	
+	@RequestMapping注释把web请求映射到特定的处理器类和/或处理器方法。它支持Servlet和Portlet环境，
+     并在这两种环境中定义相同。
+     
+     注：定义在方法上的@RequestMapping只允许缩小定义在类上的@RequestMapping的映射范围（如果类上有定义的话）。
+     在Servlet情况中，一个HTTP路径需要唯一的映射到一个指定的处理器bean，其它的映射参数和条件有效声明。
+      
+      可以通过参数条件缩小路径映射
+
+	@RequestMapping(value = "/path", params="myParam=myValue")
+	public void add(){...}
+       则
+	http://localhost:8080/DynamicWebProject/hao/hello.do?myParam=myValue
+	URL中只有存在myParam=myValue参数时才被允许访问路径映射的方法
+
+	@RequestMapping(value = "/path", method = RequestMethod.POST, headers="content-type=text/*")
+	public void add(){...}
+       则
+	只有在URL的头信息中包含有content-type=text/*(content-type=text/xml)的POST请求才能访问add()方法;
+
+
+JS:
+   1，打开链接
+     window.open(url);
+
+    error:
+	Permission denied to access property 'href' from a non-chrome context” in JavaScript and OpenLayers
+	浏览器跨域问题，当两个页面的地址、端口或域不一样时会出现 Same-Origin-policy
+	https://en.wikipedia.org/wiki/Same-origin_policy
+   
+   2,Echars绘图插件
+   3，easyui-tree,easyui-datagrid,easyui-combotree
+
+SQL:
+   1,start with 条件1 connect by A =prior B  
+	递归查询，从条件1开始，向上或向下，prior跟谁挨着向谁查
+   2,merge into using on
+	该命令使用一条语句从一个或者多个数据源中完成对表的更新和插入数据
+   3,decode(条件，值1，结果1，值2，结果2，，，，默认值)

@@ -1,12 +1,94 @@
 Oracle的基本知识（11g）
 
-一、
+一、基础
 系统：支持Windows、linux、Mac
 架构：一个实例管理一个数据库；只有在集群环境中才能实现一个实例管理多个数据库
 安全性：获得ISO安全认证
 内存：内存分配大部分由INIT.ORA决定
 
-二、表空间：
+发展：人工管理阶段，文件系统阶段，数据库系统阶段（共享，独立，集中控制，故障恢复）
+数据库模型：层次型（树状），网型，关系型
+数据库的模式（Schema）：是对数据库中全体数据的逻辑结构和特征的描述，反映数据的结构及联系；
+    数据库系统在其内部具有三级模式（外模式、模式、内模式）和
+			二级映像（外模式/模式映像——逻辑独立性、模式/内模式映像——物理独立性）
+	注：外模式：对应（面向用户或应用程序员的）用户级；——特定用户的展示，模式的子集
+	    模式：对应(面向建立和维护数据库人员的)概念级；——全局逻辑结构，总体描述，公共视图
+	    内模式：对应(面向系统程序员的)物理级——最底层描述
+常用术语：
+	表：存放数据
+	视图：虚拟表，方便查询
+	存储过程：由SQL语句和控制流语句组成的语句块，提高速度
+	触发器：特殊的存储过程，自动执行
+	约束：在数据库中保证数据库里表中数据完整性的手段；主键约束，外键约束，唯一约束，检查约束，非空约束
+
+范式——设计关系型数据库的准则
+	第一范式（1NF）：数据库表中的字段都是单一属性的，不可再分
+	第二范式（2NF）：在数据库表中不存在非关键字对任一候选关键字段的部分函数依赖；
+		即 组合主键（AB）里面的A或者B 与其他字段不能存在组合重复
+		eg：设计一个购物信息表，字段包括客户编号、产品名称、产品数量、产品类型、产品价格、客户类型，
+		    如果用客户编号和产品名称作为组合主键，那么组合主键中，产品名称和产品类型存在一定关系，是
+		    由产品名称决定产品的类型，所以不符合第二范式的要求。
+		违反2NF会出现以下问题：
+			数据冗余，更新异常，插入异常，删除异常
+		所以通常不使用组合主键
+
+	第三范式（3NF）：数据库表中不存在 非关键字段对任一候选关键字段的传递函数依赖。
+		所谓传递函数依赖是指：如果存在A决定B、B决定C的决定关系，则C传递函数依赖于A。
+	
+	PS：除了以上三种，还有一种范式经常使用，即鲍依斯-科德范式（BCNF）。它建立在第三范式的基础上，
+		要求数据库表中不存在任何字段对任一候选关键字段的传递函数依赖。
+
+ 绘制E-R图设计数据库
+	E-R图，实体-联系图，概念模型。基本要素：实体、属性、联系
+
+二、SQL关键字
+	SQL（结构化查询语言）本身可分为4类：
+		定义要在数据库存储哪些信息的数据定义语言（DDL）；——create，drop，alter
+		对数据库中的表进行操作的数据操纵语言（DML）；
+		对数据库中的表进行检索的数据查询语言（DQL）；
+		对数据库中对象进行权限管理的数据控制语言（DCL）。
+	alter table tname add column_name | modify column_name| drop column column_name;
+1，约束
+    primary key 主键相关语法:
+	ALTER TABLE tableName ADD CONSTRAINTS constraint_name PRIMARY KEY （column_name）;
+	——constraint_name:约束的名称；column_name:主键约束指定数据表中的列名
+	ALTER TABLE table_name DROP CONSTRAINT constraint_name;
+	（移除主键约束）ALTER TABLE table_name DROP CONSTRAINT constraint_name；
+    foreign key 外键相关语法：
+	（创建表时添加：） 
+		CONSTRAINT constraint_name foreign key (column_name)
+		REFERENCE table_name (column_name) ON DELETE CASCADE;
+		其中，constraint_name:创建外键约束的名字；
+		    foreign key (column_name):指定外键约束的列名；
+		    reference：要引用的表名/列名；
+		    on delete cascade:设置级联删除，当主键的字段被删除时，外键对应的字段也被删除。
+	（修改表时）ADD CONSTRAINT constraint_name foreign key (column_name)
+		REFERENCE table_name (column_name) ON DELETE CASCADE;
+	 （移除外键）
+		ALTER TABLE tName DROP CONSTRAINT constraint_name;
+    check约束 检查约束：
+	（创建时）
+		CONSTRAINT constraint_name CHECK(age>18 and age<30);
+    unique约束 唯一约束，一张表可有多个：
+	（创建时）
+		CONSTRAINT constraint_name UNIQUE(column_name);
+	    PS：mysql的语法如下
+		UNIQUE KEY `key_name` (`column_name`)
+    not null约束 非空约束：
+	与其他约束不同，在创建时，直接在字段后面设置 null,或者not null; 在修改时，不需要使用ADD，
+	只需使用MODIFY，
+		ALTER TABLE table_name MODIFY column not null;
+	不需要删除非空约束，只需要更改为null即可。
+2，操作数据库
+	INSERT INTO table_name(column1，column2，..) VALUES（data1，data2，。。。）；
+	INSERT INTO table_name(column1，column2，..) select column_name1,column_name2... from table2;
+	注：从其他表向目标表插入数据时，一定要确保两个表的列个数和类型一致，前提是目标表已经存在；
+	CREATE TABLE table_name AS SELECT column1,column2,... FROM source_table;
+	注：不创建表，通过源表添加数据时创建表；
+	    table_name要创建的目标表名称，source_table来源表。可以指定查询表字段，也可以用“*”代表；
+	
+
+三、表空间：
 
    数据库的逻辑划分，所有的数据库对象都存放在指定的表空间中。但主要存放的是表，所以称作表空间。。一个表空间只能属于一个数据库。
 
@@ -21,7 +103,65 @@ Oracle的基本知识（11g）
 	4，当表中的记录比较多的时候，查询速度会比较慢，用于大表的排序操作；
 	。。。
      不同的表空间有不同的权限控制
+=======================
+安装Oracle常见问题：
+   1，安装路径
+	选择安装目录时。如果路径不是“Oracle基目录”的子目录，会给出一个警告：建议把主目录更改为
+      基目录的根目录，这是oracle希望用户创建的多个Oracle主目录都指向一个基目录，根据需要选择；
+   2，安装环境
+	进行先决条件检查时最容易出问题，可根据“检查”列表中的内容判断是内存不足、网络TCP/IP协议造成的，
+      或其他问题；没有警告才可继续
+   3，未启动数据库监听服务
+	第一次创建数据库实例时，默认情况下，监听程序是没有被创建的，此时安装数据库实例时会出现问题；应先
+      配置并启动监听服务
+  
+   成功安装Oracle 11g后，共有7个服务，其中OracleDBConsoleorcl，
+　　	OracleMTSRecoveryService，OracleOraDb11g_home1TNSListener，OracleServiceORCL是默认自动启动的，
+	OracleJobSchedulerORCL是默认自动禁止的，其余的默认为手动操作(假设您的全局数据库名为orcl)
+   这七个服务的含义分别为：
 
+　　Oracle ORCL VSS Writer Service：(非必须启动)
+	Oracle卷映射拷贝写入服务，VSS(Volume Shadow Copy Service)能够让存储基础设备
+	(比如磁盘，阵列等)创建高保真的时间点映像，即映射拷贝(shadow copy)。
+	它可以在多卷或者单个卷上创建映射拷贝，同时不会影响到系统的系统能。
+
+　　OracleDBConsoleorcl：(非必须启动)
+	Oracle数据库控制台服务，orcl是Oracle的实例标识，默认的实例为orcl。
+	在运行Enterprise Manager(企业管理器OEM)的时候，需要启动这个服务。
+
+　　OracleJobSchedulerORCL：(非必须启动)
+	Oracle作业调度(定时器)服务，ORCL是Oracle实例标识。(非必须启动)
+
+　　OracleMTSRecoveryService：(非必须启动)
+	服务端控制。该服务允许数据库充当一个微软事务服务器MTS、COM/COM+对象和分布式环境下的事务的资源管理器。
+
+　　OracleOraDb11g_home1ClrAgent：(非必须启动)
+	Oracle数据库.NET扩展服务的一部分。
+
+　　OracleOraDb11g_home1TNSListener：(非必须启动)
+	监听器服务，服务只有在数据库需要远程访问的时候才需要。
+
+　　OracleServiceORCL：(必须启动)
+	数据库服务(数据库实例)，是Oracle核心服务该服务，是数据库启动的基础， 只有该服务启动，
+	Oracle数据库才能正常启动。
+
+　　那么在开发的时候到底需要启动哪些服务呢?
+　　   对新手来说，要是只用Oracle自带的sql*plus的话，只要启动OracleServiceORCL即可，要是使用PL/SQL Developer等
+   第三方工具的话，OracleOraDb11g_home1TNSListener服务也要开启。OracleDBConsoleorcl是进入基于web的EM必须开启的，
+   其余服务很少用。
+
+卸载
+    卸载Oralce比较繁琐，需要5个步骤：
+    1，停服务
+     开始-运行 输入 services.msc，出现服务列表，选择所有Oracle启动的服务，选择“停止”；
+    2，使用Oracle自带的卸载工具卸载
+    3，删除注册表（如果有） （开始-运行 regedit）
+	HKEY_LOCAL_MACHINE\SOFTWRE\ORACLE项
+	HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services节点下的所有Oracle项
+	HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Application下Oracle.VSSWriter.ORCL项
+    4，删除系统变量
+       系统变量列表中的ORACLE_HOME，以及classpath、path中的Oracle设置
+    5，删除安装目录下的全部内容
 
 
 

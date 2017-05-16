@@ -12,3 +12,21 @@ eg: 加载Dao时需要注解，如果不写@Resource，则程序不识别该dao,teamDao=null
 	@Resource
 	private ZdyxzwhDao teamDao ; 
 
+Bean注入：dao类中
+   ·   public abstract class SqlMapDaoSupport extends SqlSessionDaoSupport {
+		@Autowired
+		@Override
+		public void setSqlSessionTemplate(@Qualifier("sqlSessionTemp") SqlSessionTemplate sqlTempate){
+			super.setSqlSessionTemplate(sqlTempate);
+		}
+	}
+	
+	qualifier定义的sqlSession是一个bean的名字；
+   ·
+
+Service业务层中：
+   · @Qualifier("qxglDao")
+	   private QxglDao qxDao;
+
+Rest接口层中：
+	ServiceBeanContext——ClassPathXmlApplicationContext加载配置文件；
