@@ -59,6 +59,27 @@
 
        也就是说ajax可以直接访问到service层？NO。ajax访问的是servlet，servlet调用service。
 
+	我没说servlet是容器,tomcat是servlet容器,tomcat里面运行着servlet,“tomcat是servlet容器”是“tomcat是servlet的容器”.
+	
+	你就想想tomcat是个大盆子，里面放着servlet,放了很多个,因为jsp filter 也是servlet,然后tomcat不是启动了一个8080端口，
+	
+	接受socket连接，我们用浏览器访问tomcat，浏览器就起动一个socket，去连接tomcat那个serversocket,连接成功之后，就要发送请求报文，
+	
+	就是 GET http://localhost:8080/test/helloServlet 参数 a=a & b = b，还有什么报文头 报文头，编码之类的,
+	
+	然后tomcat那个serversocket收到这些字符串，解析一下，封装成一个对象，就叫 HttpServletRequest.然后根据你的web.xml配置，
+	
+	把这个请求对象和响应对象，这俩，发给servlet处理..
+	不配置web.xml中行吗
+	servlet拿到请求对象，就拿到了所需要的一切信息，然后它就开始做啊，看看是需要查数据库，还是插入数据，还是删除，还是更新，
+	还是怎么着....处理好了，就往响应里写东西，写处理结果,然后这个响应又被tomcat解析成字符串，返回给浏览器了.
+	无论用注解，还是使用web.xml都是一个道理,最终目的就是让tomcat知道什么路径调用什么servlet,就是用@WebServlet注解，
+	也要配置urlmapping，一个道理的
+	urlmapping是啥
+	
+	就是/hello*就进入HelloServlet，/login就进入LoginServlet，/addUser就进入UserServlet.
+
+
 
 ============================
 Java web整合开发

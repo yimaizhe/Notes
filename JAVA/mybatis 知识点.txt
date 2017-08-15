@@ -94,3 +94,26 @@
 
 http://www.cnblogs.com/mafly/p/5839863.html
 
+· update批量操作
+
+修改数据库连接配置：&allowMultiQueries=true
+
+比如：jdbc:MySQL://192.168.1.236:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&allowMultiQueries=true
+
+[html] view plain copy
+print?
+
+    <update id="batchUpdate"  parameterType="java.util.List">  
+            
+              <foreach collection="list" item="item" index="index" open="" close="" separator=";">  
+                    update test   
+                    <set>  
+                      test=${item.test}+1  
+                    </set>  
+                    where id = ${item.id}  
+             </foreach>  
+                
+        </update>  
+
+
+这种方式，可以一次执行多条SQL语句

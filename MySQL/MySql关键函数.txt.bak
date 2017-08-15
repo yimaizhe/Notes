@@ -1,0 +1,10 @@
+1,sum()
+
+    某些情况下用count（*）来做计数是不能很好的实现的，这个时候可以用sum配合case表达式来做累加计数，范例如下：
+
+	SELECT 
+	 sum(case when rep_haddf = 1 then 1 else 0 end) ,
+	 sum(case when rep_progress = 100 then 1 else 0 end)
+	FROM dailly_report
+	 where rep_type = '计划'
+	 group by rep_userid

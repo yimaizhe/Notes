@@ -26,8 +26,32 @@
 	set JAVA_OPTIONS=%JAVA_OPTIONS% %enableHotswapFlag% -ea -da:com.bea... -da:javelin... -da:weblogic...
 	-ea:com.bea.wli... -ea:com.bea.broker... -ea:com.bea.sbconsole...
 
+二，部署应用
 
+·tomcat
+	在server.xml中指定 
+    在Tomcat的配置文件中，一个Web应用就是一个特定的Context，可以通过在server.xml中新建Context里部署一个JSP应用程序。
+    打开server.xml文件，在Host标签内建一个Context，在tomcat中的conf目录中，在server.xml中的，<host/>节点中添加： 
+	<Context path="/hello" docBase="D:\ workspace\hello\WebRoot" debug="0" privileged="true"> 
+	</Context>
+   或者
+	<Context path="/myapp" reloadable="true" docBase="D:\myapp" workDir="D:\myapp\work"/>
+   或者
+	<Context path="/sms4" docBase="D:\workspace\sms4\WebRoot"/>
 
+	说明：
+	path是虚拟路径；
+	docBase 是应用程序的物理路径；
+	workDir 是这个应用的工作目录，存放运行时生成的与这个应用相关的文件；
+	 
+	debug 则是设定debug level,  0表示提供最少的信息，9表示提供最多的信息
+	privileged设置为true的时候，才允许Tomcat的Web应用使用容器内的Servlet
+	reloadable 如果为true，则tomcat会自动检测应用程序的/WEB-INF/lib 和/WEB-INF/classes目录的变化，自动装载新的应用程序，
+    可以在不重起tomcat的情况下改变应用程序，实现热部署 antiResourceLocking和antiJARLocking  
+	热部署是需要配置的参数，默认false避免更新了某个webapp，有时候Tomcat并不能把旧的webapp完全删除，通常会留下WEB-INF/lib下的某个
+    jar包，必须关闭Tomcat才能删除，这就导致自动部署失败。
+    设置为true，Tomcat在运行对应的webapp时，会把相应的源文件和jar文件复制到一个临时目录里。
 
+三，tomcat加载jar中的bean
 
 

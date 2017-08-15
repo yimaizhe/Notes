@@ -32,5 +32,32 @@
 	iframe得到window进行操作；
 
 
+二、table动态添加、删除特定行
 
+//添加行
+function show(){
+  var row = document.createElement("TR");
+  var t1 = document.createElement("TD");
+  t1.setAttribute("style","HEIGHT:50px");
+  t1.setAttribute("colspan","2");
 
+  t1.appendChild(divCon);
+  row.appendChild(t1);
+ 
+  //获取当前行  
+  var currentRow=$('table:first tbody tr:eq(0)');  
+  //当前行之后插入一行  
+  currentRow.after(row);  
+}
+
+//删除行
+function hide(){
+
+  var divCon=document.getElementById("divcon0");     //待隐藏行内部容器id
+  var tb =document.getElementById("table20");        //待隐藏table的id
+  var tbody = tb.getElementsByTagName("TBODY")[0];
+  var divc=document.getElementById("divcon0").parentNode.parentNode;
+  tbody.removeChild(divc);
+ 
+  return divCon;
+}

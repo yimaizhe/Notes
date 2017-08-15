@@ -8,7 +8,18 @@ Spring不是一种 全有全无 的解决方案。 如果，现有的应用使用了WebWork、Struts、Tape
 	@Service告诉spring容器，这是一个Service类，默认情况会自动加载它到spring容器里。
 	@Autowired注解告诉spring，这个字段是需要自动注入的。
 
-eg: 加载Dao时需要注解，如果不写@Resource，则程序不识别该dao,teamDao=null
+eg1:
+	public class QxglService extends BaseService{
+		@Autowired
+		private QxglDao qxDao;
+		private ControllerDao ctlDao;
+	}
+	这样ctlDao会报空指针——每个dao分别写@Autowired； 如果ControllerDao类里，用@Component("contrDao")定义，
+    括号中有名字，可以不用对ctlDao添加@Autowired，但：1，如果此dao有多个实例，需要加注解；因为@Autowired是按类型装配的；
+    2，如果用@Resource，需要加注解，@Resource是按名称装配的，默认名称是属性名；
+
+
+eg2: 加载Dao时需要注解，如果不写@Resource，则程序不识别该dao,teamDao=null
 	@Resource
 	private ZdyxzwhDao teamDao ; 
 
@@ -30,3 +41,28 @@ Service业务层中：
 
 Rest接口层中：
 	ServiceBeanContext——ClassPathXmlApplicationContext加载配置文件；
+
+
+============
+@Resource      vs       @Autowired
+
+ java定义	        Spring定义
+
+1、@Autowired与@Resource都可以用来装配bean. 都可以写在字段上,或写在setter方法上。 
+2、@Autowired默认按类型装配（这个注解是属业spring的），默认情况下必须要求依赖对象必须存在，如果要允许null 值，
+可以设置它的required属性为false，如：@Autowired(required=false) ，如果我们想使用名称装配可以结合@Qualifier注解进行使用，如下：
+	   
+	    @Autowired() @Qualifier("baseDao")     
+	    private BaseDao baseDao;  
+
+3、@Resource（这个注解属于J2EE的），默认安照名称进行装配，名称可以通过name属性进行指定， 
+如果没有指定name属性，当注解写在字段上时，默认取字段名进行按照名称查找，如果注解写在setter方法上默认取属性名进行装配。 
+当找不到与名称匹配的bean时才按照类型进行装配。但是需要注意的是，如果name属性一旦指定，就只会按照名称进行装配。
+	    
+	    @Resource(name="baseDao")     
+	    private BaseDao baseDao;    
+
+
+
+
+

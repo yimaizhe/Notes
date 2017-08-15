@@ -1,3 +1,9 @@
+一个servlet的基本配置，包括
+	·servlet类，——一般doGet,doPost
+	·<servlet>配置——告诉浏览器怎么访问这个servlet，包括<servlet-name>、<servlet-class>、<init-param>
+	·<servlet-mapping>配置——访问servlet的访问方式, 包括<servlet-name>、<url-pattern>
+  缺一不可
+
 Servlet过滤器web.xml的配置
 
     Servlet过滤器，它是一种特殊的Servlet,可以用来对请求进行过滤。多个过滤器可以形成过滤链（FilterChain）。

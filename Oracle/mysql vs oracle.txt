@@ -1,0 +1,51 @@
+语法方面的差异：
+
+1，递归调用
+	·oracle: start with connect by prior
+	·mysql需要用函数实现：
+		delimiter // 
+		CREATE FUNCTION `getParLst`(rootId INT)
+		RETURNS varchar(1000) 
+
+		BEGIN
+			DECLARE sTemp VARCHAR(1000);
+			DECLARE sTempPar VARCHAR(1000); 
+			SET sTemp = ''; 
+			SET sTempPar =rootId; 
+			
+			#循环递归
+			WHILE sTempPar is not null DO 
+				#判断是否是第一个，不加的话第一个会为空
+				IF sTemp != '' THEN
+					SET sTemp = concat(sTemp,',',sTempPar);
+				ELSE
+					SET sTemp = sTempPar;
+				END IF;
+
+				SET sTemp = concat(sTemp,',',sTempPar); 
+				SELECT group_concat(pid) INTO sTempPar FROM treenodes where pid<>id and FIND_IN_SET(id,sTempPar)>0; 
+			END WHILE; 
+			
+		RETURN sTemp; 
+		END
+		//
+2，获取上月时间
+	·oracle： trunc();select trunc(add_months(sysdate, -3), 'MM') from dual
+	·mysql：cast();
+		select date_sub(now(),interval 1 month)    上个月今天的当前时间  
+		select UNIX_TIMESTAMP(date_sub(now(),interval 1 month))    上个月今天的当前时间（时间戳）  
+		select date_sub(date_sub(date_format(now(),'%y-%m-%d 08:00:00'),interval extract( day from  
+			now())-1 day),interval 1 month)上个月的第一天  
+		select UNIX_TIMESTAMP(date_sub(date_sub(date_format(now(),'%y-%m-%d 08:00:00'),interval  
+			extract( day from now())-1 day),interval 1 month))    上个月的第一天（时间戳）   
+		上个月的第一天：     
+		select date_sub(date_sub(date_format(now(),'%y-%m-%d'),interval extract(    
+		   day from now())-1 day),interval 1 month)  
+		上个月的最后一天：  
+		  
+		select date_sub(date_sub(date_format(now(),'%y-%m-%d'),interval extract(    
+		   day from now()) day),interval 0 month) as date  
+
+3,基本类型
+	oracle存储大字段：clob (10g最大4G）
+	mysql：longtext;text;blob

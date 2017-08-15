@@ -86,9 +86,7 @@ Oracle的基本知识（11g）
 	CREATE TABLE table_name AS SELECT column1,column2,... FROM source_table;
 	注：不创建表，通过源表添加数据时创建表；
 	    table_name要创建的目标表名称，source_table来源表。可以指定查询表字段，也可以用“*”代表；
-3，其他数据操纵语句
-	·truncate
-	 truncate和delete一样，都是用来完成数据删除的，不同之处在于truncate删除的是表的全部记录，并且速度快，无
+	
 
 三、表空间：
 
