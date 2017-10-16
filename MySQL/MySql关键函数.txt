@@ -1,3 +1,5 @@
+关键函数
+
 1,sum()
 
     某些情况下用count（*）来做计数是不能很好的实现的，这个时候可以用sum配合case表达式来做累加计数，范例如下：
@@ -13,3 +15,12 @@
  
 	场景：替换部分字符串;replace(str,from_str,to_str)
 	eg: update tableName set url=REPLACE('www.test.com','test','abc');
+==============================================================
+关键字
+1,after
+	调整字段顺序：
+	alter table 表名
+	change 字段名 新字段名 字段类型 默认值 after 字段名(跳到哪个字段之后)
+     eg:
+        alter table wh_dlrz 
+	change userid `userid` varchar(50) DEFAULT NULL COMMENT '主键' after xh

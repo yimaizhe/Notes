@@ -8,3 +8,8 @@
 	FROM dailly_report
 	 where rep_type = '计划'
 	 group by rep_userid
+
+2,replace()
+ 
+	场景：替换部分字符串;replace(str,from_str,to_str)
+	eg: update tableName set url=REPLACE('www.test.com','test','abc');

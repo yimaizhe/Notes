@@ -29,6 +29,7 @@ Spring可以做很多事情，但归根结底支撑Spring的仅仅是少许的基本理念，所有理念都可以
      注解减少了配置Spring所需要的XML基本信息。@Autowired实现基于注解驱动的依赖注入； @Qualifier实现细粒度的自动装配控制
 
 二，利用XML组织松耦合组件间的依赖和属性
+
 2.1，创建应用对象之间协作关系的行为通常被称为装配（wiring）——依赖注入的本质；
 2.2，Spring提供了两种配置Bean的方式，XML文件和注解
 xml文件的命名空间：
@@ -100,7 +101,51 @@ eg：
     .?[] 查询运算符  .^[]查询第一个匹配项 .$[] 查询最后一个匹配项
     .![] 投影运算符
 三，面向注解的配置
+
+ · @Value 传入String或基本类型（int,boolean）为方法、参数、属性赋值
+    简单的固定值没有必要用注解，可使用SpEL表达式动态改变值
+    @value("#{systemProperties.mysong}") aa是string类型表达式，但计算结果可以是任意类型
+
 四，AOP
+
+ ·通知：定义了什么时候干什么事；\   切面 aspect
+   连接点：定义了做事的范围      /  
+   切点：定义了在哪做事            切点pointcut
+
+ ·SpringAOP只支持方法连接点，AspectJ，JBoss还支持字段和构造连接点
+
+ ·AspectJ指示器 execution()是最主要的指示器，其他指示器配合其使用，用于限制所匹配的切点
+
+	      任意返回类型       执行play()方法
+                  |                     \
+	execution(* com.dc.springinadol.play(..))
+	       && within(com.springinaction.*)
+	       /                        \
+	 与(and)操作符         当该包内任意类的方法被调用时
+   
+  ·属性<aop:config>
+         <aop:aspect ref="">
+	     <aop:pointcut id="" expression="execution(* ..)" />
+	     <aop:before pointcut-ref="" method=""/>
+	     <aop:after pointcut-ref="" method=""/>
+	     <aop:after-returning .... />
+	     <aop:after-throwing ... />
+	     <aop:around pointcut-ref="" method="" />   声明环绕通知
+	</aop:aspect>
+      </aop:config>
+    定义的切点如果需要让多个切面共用，可放到config作用域内
+
+    使用around时，对应的方法需要传入参数：
+    pubilc String Test(ProceedingJoinPoint point){
+           //befor...
+	   point.proceed(); //在通知里调用被通知的方法
+	   //after
+    
+    }
+
+ PS:切static方法时，注意
+   不能切监听器(listener)，因为监听器不归Spring管
+
 五，对数据持久化的支持
 六，借助事务支持确保数据库的完整性
 七，Spring MVC框架》
