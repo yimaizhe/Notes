@@ -1,0 +1,16 @@
+Javascript刷新页面的几种方法：
+
+
+1，history.go(0)
+2，//强迫浏览器刷新当前页面;
+   //参数默认为 false，从客户端缓存里取当前页;
+   //true, 则以 GET 方式，从服务端取最新的页面, 相当于客户端点击 F5("刷新")
+     location.reload()
+3，location=location
+4，location.assign(location)
+5，document.execCommand('Refresh')
+6，window.navigate(location)
+7， //通过指定URL替换当前缓存在历史里（客户端）的项目，因此当使用replace方法之后，
+    //你不能通过“前进”和“后退”来访问已经被替换的URL。类似客户端点F5刷新页面
+     location.replace(location)
+8，document.URL=location.href

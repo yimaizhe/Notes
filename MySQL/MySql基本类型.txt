@@ -1,0 +1,34 @@
+一、 mysql datetime、date、time、timestamp区别
+
+    我们看看这几个数据库中（mysql、oracle和sqlserver）如何表示时间
+    mysql数据库：它们分别是 date、datetime、time、timestamp和year。
+               date ：“yyyy-mm-dd”格式表示的日期值 
+               time ：“hh:mm:ss”格式表示的时间值 
+	       datetime： “yyyy-mm-dd hh:mm:ss”格式 
+	       timestamp： “yyyymmddhhmmss”格式表示的时间戳值
+	       year： “yyyy”格式的年份值。
+
+    date “1000-01-01”到“9999-12-31” 3字节
+    time “-838:59:59”到“838:59:59” 3字节
+    datetime “1000-01-01 00:00:00” 到“9999-12-31 23:59:59” 8字节
+    timestamp 19700101000000 到2037 年的某个时刻 4字节
+    year 1901 到2155 1字节
+
+    oracle数据库：
+    Date类型的内部编码为12
+    长度:占用7个字节
+    数据存储的每一位到第七位分别为：世纪，年，月，日，时，分，秒
+    TIMESTAMP是支持小数秒和时区的日期/时间类型。对秒的精确度更高
+    TIMESTAMP WITH TIME ZONE类型是TIMESTAMP的子类型，增加了时区支持，占用13字节的存储空间，最后两位用于保存时区信息
+    INTERVAL 用于表示一段时间或一个时间间隔的方法.在前面有多次提过.INTERVAL有两种类型.
+    YEAR TO MONTH 能存储年或月指定的一个时间段.
+    DATE TO SECOND存储天,小时,分钟,秒指定的时间段.
+
+    sql server：datetime和smalldatetime
+    datetime数据类型所占用的存储空间为8个字节，其中前4个字节用于存储1900年1月1日以前或以后的天数，
+             数值分正负，正数表示在此日期之后的日期，负数表示在此日期之前的日期；
+	     后4个字节用于存储从此日零时起所指定的时间经过的毫秒数。
+    smalldatetime数据类型使用4个字节存储数据。其中前2个字节存储从基础日期1900年1月1日以来的天数，
+                 后两个字节存储此日零时起所指定的时间经过的分钟数。
+    smalldatetime数据类型与datetime数据类型相似，但其日期时间范围较小，从1900年1月1日到2079年6月6日。
+                  此数据类型精度较低，只能精确到分钟，其分钟个位为根据秒数四舍五入的值，即以30秒为界四舍五入。

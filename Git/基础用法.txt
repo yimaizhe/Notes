@@ -37,14 +37,3 @@
 
 	——创建并切换分支：git checkout -b newName
  
---------------------------------------
-问题：
---------------------------------------
-1,使用代理上网时，连接git总是超时，pull不了，ssh -T 也不行：
-
-  查看代理：
-	git config --global http.proxy
-  设置代理
-	git config --global http.proxy 10.126.3.161:3128
-  取消代理
-	git config --global --unset http.proxy

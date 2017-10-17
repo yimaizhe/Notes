@@ -1,0 +1,4 @@
+Linux下MySQL配置文件my.ini位置:
+
+   MySQL配置文件在Windows下叫my.ini，在MySQL的安装根目录下；
+   在Linux下叫my.cnf，该文件位于/etc/my.cnf。

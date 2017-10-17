@@ -1,2 +1,20 @@
 1,git config -l
 	查看本地git配置
+2,为git配置代理(不同协议，不同配置)
+    http协议（http://）： http.proxy
+         git config http.proxy http://10.126.3.110:56000
+    git协议（git：//）: core.gitproxy
+         
+    ssh协议（ssh://）: ProxyCommand 参数
+
+    --------------------------------------
+    问题：
+    --------------------------------------
+   ①,使用代理上网时，连接git总是超时，pull不了，ssh -T 也不行：
+
+     查看代理：
+	git config --global http.proxy
+     设置代理
+	git config --global http.proxy 10.126.3.161:3128
+     取消代理
+	git config --global --unset http.proxy
