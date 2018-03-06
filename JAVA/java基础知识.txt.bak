@@ -77,26 +77,6 @@ Others:
   ·list.indexOf("usb") 与list.indexOf("SBU")不同 //indexOf()区分大小写
 
   POI处理Excel文件
-3，HashSet HashMap
-
-    hashset本质上是hashmap，它不像List那样能通过下标访问。hashset是用hash值和hashset的size取余数来确定它存放在哪里
-
- 还需要理解hashcode方法和equals方法，都与这个有关系，
-hashset和hashmap的实现方式是一模一样的，hashset中放的也是K：V，就是Value都是一个Object；
-hashmap底层是一个数组，假设这个数组的长度是16，那么假如一个Key的hash值是17，那么和16取余数得一，那么就将这个键值对封装
-成一个对象放在数组下标是1的那个位置，这个对象也就是Map.entry；
-下次你通过这个Key来取这个Value，只需要读取这个Key的hash值（hash值只计算一次），然后和hashmap的size取余，
-一次就能找到它存在下标1的位置，是不是很快！
-
-问题就是hash值相等对象可能不一样，这时候需要用到equals方法了
-杨喆 16:55:31
-还有就是不同的hash值和size取余数可能一样，那么Map.Entry中有指针，可以形成链表
-杨喆 16:55:43
-这就是hashmap的结构了，十分简单
-杨喆 16:56:40
-还有treemap，是一颗红黑树，红黑树是二叉树，而刚刚的Hashmap底层是数组，不一样的
-杨喆 16:57:08
-还有优先队列，底层是Heap，也是二叉树
 
 
 

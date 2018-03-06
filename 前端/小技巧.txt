@@ -1,0 +1,5 @@
+1,获取某一id下面所有子元素中，包含某个class的子元素
+  <div id="test">
+       <p class="show"></p>
+  </div>
+  获取p标签： $("#test>.show")

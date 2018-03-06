@@ -24,3 +24,19 @@
      eg:
         alter table wh_dlrz 
 	change userid `userid` varchar(50) DEFAULT NULL COMMENT '主键' after xh
+
+2，truncate  清空表数据
+      truncate table 表名
+    如果主键是自增的，drop table后再重新create table，主键还按drop前的序号自增；
+    使用truncate则可重置主键，从1开始
+
+3， change 
+  修改表A主键id类型，同时是其他表的外键
+  先删除关联关系，把外键删除；如果是自增长类型，先删除自增长属性；删除主键属性；
+  修改类型； 添加主键属性；添加外键；
+  eg:
+       alter table C drop foreign key `FK_C_A`;
+       alter table A change id id int;
+       alter table A drop primary key;
+       alter table A change id id varchar(20);
+       alter table A add primary key(id);

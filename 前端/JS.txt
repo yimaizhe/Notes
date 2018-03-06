@@ -66,8 +66,6 @@ function hide(){
 
 在高版本的jquery引入prop方法后，什么时候该用prop？什么时候用attr？它们两个之间有什么区别？这些问题就出现了。
 
-关于它们两个的区别，网上的答案很多。这里谈谈我的心得，我的心得很简单：
-
     对于HTML元素本身就带有的固有属性，在处理时，使用prop方法。
     对于HTML元素我们自己自定义的DOM属性，在处理时，使用attr方法。
 eg:
@@ -85,3 +83,10 @@ eg:
 	$("#chk1").attr("checked") == undefined
 	$("#chk2").attr("checked") == "checked"
 
+四，js为jsp中标签设置值，并换行
+    <p id="test"></p>
+       js: document.getElementById("test").innerText="测试换行\n<br />"
+       jquey:$("#test).text("测试换行\n<br />")都不行，
+    需要用
+       js: document.getElementById("test").innerHTML="测试换行 <br />";
+       jquery: $("#test").html("测试换行<br />");

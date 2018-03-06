@@ -1,0 +1,43 @@
+
+·通过ACL的授权
+
+　　通过‹http›的‹intercept-url›进行配置：
+
+<sec:http access-decision-manager-ref="accessDecisionManager">
+   <sec:intercept-url pattern="/app/messageList*" access="ROLE_USER,ROLE_ANONYMOUS"/>
+   <sec:intercept-url pattern="/app/messagePost*" access="ROLE_USER"/>
+</sec:http>
+ 每个 intercept-url 规定了一个 url模式和角色，具有这个角色的用户可以访问这些URL。
+ 注意 url-pattern总是以 ‘*’结束，如果 ‘*’ 没有规定，提供黑客在url中提供一些参数绕过安全机制
+
+
+eg:
+   <http use-expressions='true' entry-point-ref="frameAuthenticationEntryPoint" 
+    access-denied-page="/access-denied.jsp">
+      <custom-filter ref="frameAuthenticationFilter" position="FROM_LOGIN_FILTER" />
+      <custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="frameAuthorizationFilter" />
+      <logout invalidate-session="true" logout-url="j_spring_security_logout" />
+   </http>
+
+   <!--未登录切入点-->
+   <beans:bean id="frameAuthenticationEntryPoint" class="...SmartLoginUrlAuthenticationEntryPoint">
+     <beans:property name="loginFormUrl" value="/login.jsp" />
+   </beabs:bean>
+   <!--登录验证器-->
+   <beans:bean id="frameAuthenticationFilter" class="...FrameAuthenticationFilter">
+   ...
+   </beans:bean>
+   <!--认证过滤器：判断用户有没有访问特定资源的权限-->
+   <beans:bean id="frameAuthorizationFilter" class="...FrameAuthorizationFilter">
+   ...
+   </beans:bean>
+   
+    SmartLoginUrlAuthenticationEntryPoint这个类就是判断出没有登录就执行commence方法，继承Spring方法
+
+    你们自己定义了这个子类目的是使用ajax的时候也能返回json信息
+
+    com.digitalchina.security.authentication.spring.FrameAuthenticationFilter这个就是是否登录的验证器
+
+    这里是验证器验证出来用户没有登录，就调用你们自己写的那个类SmartLoginUrlAuthenticationEntryPoint的commence方法，
+      这个方法里判断如果是ajax，就返回json数据，如果不是ajax，就调用父类的，父类会定向到login.jsp
+    如果是ajax，那么定向到login.jsp——这是浏览器的js做的

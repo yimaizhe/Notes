@@ -71,8 +71,21 @@
 	② 直接执行sql语句时，可以用like '%?%',但在mybatis中，需要改成 
 		and group_dm like #{preStr}
 
+4,调试mybatis语句，在控制台显示：
+   ① 在mybatis-config.xml中配置
+    <configuration>
+        <settings>
+	    <setting name="logImpl" value="STDOUT_LOGGING" />
+	</settings>
+    </configuration>
+    注： 此种是输出所有的语句
+    =LOG4J
+5,sql的表名是参数 使用${_parameter}
+   使用变量作为列名，'${para}' as col 
 
-------------------
+-------------------------
+****************
+-------------------------
 3，单元测试
 
     测试一个类，service或dao时，可以使用@Resource注入，不过之前需要load applicationContext.xml，

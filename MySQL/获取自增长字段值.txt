@@ -58,3 +58,19 @@ ibatis的selectkey
             SELECT IF(row_count() > 0, last_insert_id(), 0) AS id FROM dual
         </selectKey>
     </insert>
+   
+二、 取重复数据中的第一条
+          #一个项目号对应多个项目名称、客户名称时，取填表日期最靠前的
+	      select * from(
+		   select  zd_xmbh,ZD_XMMC,ZD_KHMC ,ZD_TBRQ,
+			if(@pdept=zd_xmbh,@rank:=@rank+1,@rank:=1) as rank,
+			 @pdept:=zd_xmbh
+		   from (   
+			  select zd_xmbh,ZD_XMMC,ZD_KHMC,ZD_TBRQ
+			  from dr_yg_6_yxmjzf
+			  where zd_nd=AN_ND 
+			      AND LPAD(zd_yf,2,'0') = LPAD(AN_YF,2,'0') 
+			  order by zd_xmbh asc,ZD_TBRQ asc
+			)a, (select @rownum :=0 , @pdept := null ,@rank:=0) b  
+	    )t having rank=1
+               
