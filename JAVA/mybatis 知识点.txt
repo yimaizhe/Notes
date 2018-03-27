@@ -80,8 +80,38 @@
     </configuration>
     注： 此种是输出所有的语句
     =LOG4J
+
+  ② 使用log4j配置文件
+     # 定义 DEBUG 优先级， R 为日志输出目的的     
+    log4j.rootLogger= DEBUG,CONSOLE
+    #console     
+    log4j.appender.CONSOLE= org.apache.log4j.ConsoleAppender
+    log4j.appender.CONSOLE.layout= org.apache.log4j.PatternLayout   
+ #    log4j.appender.CONSOLE.Append= true    
+#    # 日志输出信息格式为 换行、日期、优先级、 [ 全类名 ] 、日志信息、换行   
+    log4j.appender.CONSOLE.layout.ConversionPattern= %n%d%p [%l] %m%n   
+    log4j.logger.org.apache=INFO
+    log4j.logger.java.sql.ResultSet=INFO
+    log4j.logger.java.sql.Statement=DEBUG
+    log4j.logger.java.sql.Connection=DEBUG
+    log4j.logger.java.sql.PreparedStatement=DEBUG
+
 5,sql的表名是参数 使用${_parameter}
    使用变量作为列名，'${para}' as col 
+
+6，truncate 表时，用update
+       <update id="truncateTable"  parameterType="java.util.Map">
+	  TRUNCATE table ${tableName}
+       </update>
+
+7, 调用存储过程
+	用select，存储过程没有输出时，不要返回值（mybatis里，以及dao程序里），
+	<select id="machinData" parameterType="java.util.Map" statementType="CALLABLE">
+		call ${name}(Year(now()),month(now())-1)
+	</select>
+	public void machinData(Map<String,Object>  param){
+              sqlSession.selectOne("machinData", param);
+	}
 
 -------------------------
 ****************
