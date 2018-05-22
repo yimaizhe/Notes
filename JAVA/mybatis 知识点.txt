@@ -113,6 +113,14 @@
               sqlSession.selectOne("machinData", param);
 	}
 
+8，xml中的sql传参数时，参数名字#{gnqxDm}限制？？
+
+   ·传复杂参数 map<string,list<String>> ,或者map<string,map<string,string>>等
+   取单个字符串时，直接取；遍历时，直接使用最外层map的value
+
+
+
+
 -------------------------
 ****************
 -------------------------
